@@ -28,26 +28,106 @@
     <div class="absolute bottom-20 right-20 w-72 h-72 bg-blue-600/25 rounded-full blur-3xl"></div>
 </div>
 
-<!-- Header/Navigation -->
-<nav class="relative z-10 border-b border-white/5 bg-[#020617]/50 backdrop-blur-sm sticky top-0">
+<!-- Header/Navigation con Dropdown para Alianzas -->
+<nav class="relative z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm sticky top-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
                     <span class="text-black font-bold text-xl">I</span>
                 </div>
                 <span class="text-white font-bold text-xl tracking-tight">Infini<span class="text-blue-400">Hon</span></span>
             </div>
+            
+            <!-- Navegación principal -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
                 <a href="servicios.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
                 <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
                 <a href="blog.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Blog</a>
-                <a href="alianzas.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Alianzas</a>
+                
+                <!-- Dropdown de Alianzas (con hover) -->
+                <div class="relative group">
+                    <!-- Botón principal -->
+                    <a href="index.html" 
+                       class="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center gap-1 group-hover:text-white">
+                        Contenido
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                             class="transition-transform duration-300 group-hover:rotate-180">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </a>
+                    
+                    <!-- Dropdown menu (aparece con hover) -->
+                    <div class="absolute left-0 mt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top group-hover:translate-y-0 translate-y-2">
+                        <!-- Fondo glassmorphism -->
+                        <div class="relative bg-[#020617]/90 backdrop-blur-xl border border-blue-500/20 rounded-xl shadow-2xl overflow-hidden">
+                            <!-- Decoración superior -->
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-400"></div>
+                            
+                            <div class="p-2">
+                                <!-- Alianza MikroTik -->
+                                <a href="alianzas-mikrotik.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-500/10 transition-all group/item">
+                                    <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/30 group-hover/item:border-blue-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line><line x1="2" y1="8" x2="22" y2="8"></line><line x1="2" y1="16" x2="22" y2="16"></line></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Alianzas</p>
+                                        <p class="text-gray-400 text-xs">Platinum Partner</p>
+                                    </div>
+                                </a>
+                                
+                                <!-- Alianza Raspberry Pi -->
+                                <a href="alianzas-raspberry.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-500/10 transition-all group/item">
+                                    <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30 group-hover/item:border-purple-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Raspberry Pi</p>
+                                        <p class="text-gray-400 text-xs">Design Partner</p>
+                                    </div>
+                                </a>
+                                
+                                <!-- Alianza Nation II -->
+                                <a href="alianzas-nation.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-cyan-500/10 transition-all group/item">
+                                    <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center border border-cyan-500/30 group-hover/item:border-cyan-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">Nation II</p>
+                                        <p class="text-gray-400 text-xs">Strategic Partner</p>
+                                    </div>
+                                </a>
+                                
+                                <!-- Alianza AWS -->
+                                <a href="alianzas-aws.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-orange-500/10 transition-all group/item">
+                                    <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center border border-orange-500/30 group-hover/item:border-orange-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">AWS</p>
+                                        <p class="text-gray-400 text-xs">Advanced Partner</p>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- Separador -->
+                            <div class="border-t border-white/5 my-1"></div>
+                            
+                            <!-- Ver todas las alianzas -->
+                            <a href="alianzas.html" class="flex items-center justify-between p-3 hover:bg-blue-500/10 transition-all">
+                                <span class="text-sm text-gray-300">Ver todas las alianzas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <a href="contacto.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all inline-block">
-    Contactar
-</a>
+                Contactar
+            </a>
         </div>
     </div>
 </nav>
