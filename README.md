@@ -2,7 +2,7 @@
 
 <div align="center">
   
-  ![InfiniHon Logo](https://via.placeholder.com/200x200/1e40af/ffffff?text=INFINIHON)
+  ![InfiniHon Logo]([https://via.placeholder.com/200x200/1e40af/ffffff?text=INFINIHON](https://instasize.com/p/234d35f8e7591c1e7bba9cd5583a56496162a606aaeee65168cab4e2bddd4bfc))
   
   ### Infraestructura de Grado Industrial para Empresas Modernas
   
