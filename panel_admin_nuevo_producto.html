@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Agregar Producto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism extremo */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Sidebar estilo admin */
+        .sidebar {
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(59, 130, 246, 0.15);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+        }
+        
+        .sidebar-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-left-color: #3b82f6;
+        }
+        
+        /* Inputs del formulario */
+        .form-section {
+            transition: all 0.3s ease;
+        }
+        
+        .form-section:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .input-field:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .input-field::placeholder {
+            color: rgba(148, 163, 184, 0.3);
+            font-weight: 300;
+        }
+        
+        /* Textarea */
+        .textarea-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .textarea-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Select personalizado */
+        .select-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+        
+        .select-field option {
+            background: #020617;
+            color: white;
+        }
+        
+        /* Upload de imágenes */
+        .upload-area {
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Previsualización de imágenes */
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-preview-item:hover .remove-image {
+            opacity: 1;
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+        
+        /* Switch toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 2px;
+            background-color: #9ca3af;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(22px);
+            background-color: white;
+        }
+        
+        /* Especificaciones dinámicas */
+        .spec-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Tags */
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+        }
+        
+        .tag {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tag .remove-tag {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tag .remove-tag:hover {
+            opacity: 1;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Panel Admin - Agregar Producto -->
+<div class="flex h-screen overflow-hidden">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex-shrink-0 hidden lg:block overflow-y-auto">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+                <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 ml-2">ADMIN</span>
+            </div>
+            
+            <!-- Menú -->
+            <nav class="space-y-1">
+                <div class="text-xs font-mono text-gray-500 mb-4 tracking-wider px-4">PRODUCTOS</div>
+                
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span class="text-sm">Todos los productos</span>
+                </a>
+                
+                <a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span class="text-sm">Agregar producto</span>
+                </a>
+                
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <span class="text-sm">Categorías</span>
+                </a>
+                
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                    <span class="text-sm">Inventario</span>
+                </a>
+            </nav>
+            
+            <!-- Usuario -->
+            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <span class="text-white font-medium">AD</span>
+                    </div>
+                    <div>
+                        <div class="text-white text-sm font-medium">Admin User</div>
+                        <div class="text-gray-400 text-xs font-mono">admin@infinihon.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Contenido principal -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Header -->
+        <header class="glass-panel sticky top-0 z-30 mx-4 mt-4 px-6 py-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-white text-xl font-light">Agregar Nuevo Producto</h1>
+                    <span class="text-gray-400 text-sm font-mono">/ completar información</span>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Estado guardado -->
+                    <div class="flex items-center gap-2 text-green-400 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><circle cx="12" cy="8" r="0.5" fill="currentColor" stroke="none"></circle></svg>
+                        <span>Borrador guardado</span>
+                    </div>
+                    
+                    <!-- Avatar -->
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <span class="text-white font-medium">AD</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Formulario de producto -->
+        <div class="p-6">
+            <form id="productForm" class="space-y-6">
+                <!-- Información básica -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M5.3 18.3A8 8 0 0 1 12 16c2.5 0 4.8 1.2 6.3 3"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                        Información básica
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- Nombre del producto -->
+                        <div class="input-group">
+                            <label class="input-label">Nombre del producto *</label>
+                            <input type="text" class="input-field" placeholder="Ej: MikroTik RB4011" required>
+                        </div>
+                        
+                        <!-- SKU -->
+                        <div class="input-group">
+                            <label class="input-label">SKU *</label>
+                            <input type="text" class="input-field" placeholder="Ej: MT-RB4011" required>
+                        </div>
+                        
+                        <!-- Categoría -->
+                        <div class="input-group">
+                            <label class="input-label">Categoría *</label>
+                            <select class="select-field" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="routers">Routers MikroTik</option>
+                                <option value="raspberry">Raspberry Pi</option>
+                                <option value="switches">Switches</option>
+                                <option value="accesorios">Accesorios</option>
+                                <option value="servidores">Servidores</option>
+                                <option value="placas">Placas</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Subcategoría -->
+                        <div class="input-group">
+                            <label class="input-label">Subcategoría</label>
+                            <input type="text" class="input-field" placeholder="Ej: Router empresarial">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Precios y stock -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        Precios y stock
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <!-- Precio -->
+                        <div class="input-group">
+                            <label class="input-label">Precio ($) *</label>
+                            <input type="number" step="0.01" class="input-field" placeholder="0.00" required>
+                        </div>
+                        
+                        <!-- Precio comparativa -->
+                        <div class="input-group">
+                            <label class="input-label">Precio de comparación</label>
+                            <input type="number" step="0.01" class="input-field" placeholder="0.00">
+                        </div>
+                        
+                        <!-- Stock -->
+                        <div class="input-group">
+                            <label class="input-label">Stock *</label>
+                            <input type="number" class="input-field" placeholder="0" required>
+                        </div>
+                        
+                        <!-- Umbral stock bajo -->
+                        <div class="input-group">
+                            <label class="input-label">Umbral stock bajo</label>
+                            <input type="number" class="input-field" placeholder="10">
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="input-group">
+                            <label class="input-label">Estado</label>
+                            <select class="select-field">
+                                <option value="activo">Activo</option>
+                                <option value="stock-bajo">Stock bajo</option>
+                                <option value="agotado">Agotado</option>
+                                <option value="oculto">Oculto</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Producto destacado -->
+                        <div class="flex items-center gap-3 mt-6">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="text-gray-300 text-sm">Producto destacado</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Descripciones -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
+                        Descripciones
+                    </h2>
+                    
+                    <!-- Descripción corta -->
+                    <div class="input-group">
+                        <label class="input-label">Descripción corta</label>
+                        <input type="text" class="input-field" placeholder="Breve descripción del producto">
+                    </div>
+                    
+                    <!-- Descripción larga -->
+                    <div class="input-group">
+                        <label class="input-label">Descripción detallada</label>
+                        <textarea class="textarea-field" placeholder="Descripción completa del producto, características principales..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Imágenes -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L6 21"></path></svg>
+                        Imágenes del producto
+                    </h2>
+                    
+                    <!-- Upload area -->
+                    <div id="dropArea" class="upload-area">
+                        <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" class="mx-auto mb-3"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L6 21"></path></svg>
+                        <p class="text-gray-300 text-sm mb-1">Arrastra y suelta imágenes aquí</p>
+                        <p class="text-gray-500 text-xs mb-3">o</p>
+                        <button type="button" onclick="document.getElementById('fileInput').click()" class="btn-secondary px-4 py-2 rounded-lg text-sm">
+                            Seleccionar archivos
+                        </button>
+                        <p class="text-gray-500 text-xs mt-3">PNG, JPG, WEBP hasta 10MB</p>
+                    </div>
+                    
+                    <!-- Previsualización -->
+                    <div id="imagePreview" class="image-preview-container"></div>
+                </div>
+                
+                <!-- Especificaciones técnicas -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        Especificaciones técnicas
+                    </h2>
+                    
+                    <div id="specsContainer" class="space-y-2">
+                        <!-- Las especificaciones se agregarán aquí dinámicamente -->
+                    </div>
+                    
+                    <button type="button" onclick="addSpecification()" class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2 mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Agregar especificación
+                    </button>
+                </div>
+                
+                <!-- Tags / Características -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="16.5" r="1.5" fill="currentColor" stroke="none"></circle><path d="M21 11v5a2 2 0 0 1-2 2H8"></path><path d="M3 15h6l2-2 2 2 2-2 2 2 2-2 2 2 2-2"></path></svg>
+                        Características / Tags
+                    </h2>
+                    
+                    <div class="tag-input-container" id="tagContainer">
+                        <!-- Los tags se agregarán aquí -->
+                    </div>
+                    
+                    <div class="flex gap-2 mt-3">
+                        <input type="text" id="tagInput" class="input-field flex-1" placeholder="Nueva característica">
+                        <button type="button" onclick="addTag()" class="btn-secondary px-4 py-2 rounded-lg">
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- SEO -->
+                <div class="glass-panel rounded-2xl p-6 form-section">
+                    <h2 class="text-white font-medium mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        SEO
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label class="input-label">Meta título</label>
+                            <input type="text" class="input-field" placeholder="Título para SEO">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Meta descripción</label>
+                            <input type="text" class="input-field" placeholder="Descripción para SEO">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Slug</label>
+                            <input type="text" class="input-field" placeholder="url-amigable-del-producto">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="flex gap-4 justify-end">
+                    <button type="button" class="btn-danger px-6 py-3 rounded-xl text-white text-sm font-medium">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn-secondary px-6 py-3 rounded-xl text-gray-300 text-sm font-medium">
+                        Guardar borrador
+                    </button>
+                    <button type="submit" class="btn-primary px-8 py-3 rounded-xl text-white text-sm font-medium">
+                        Publicar producto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script>
+    // Variables globales
+    let specCount = 0;
+    let tags = [];
+    
+    // Agregar especificación técnica
+    function addSpecification() {
+        specCount++;
+        const container = document.getElementById('specsContainer');
+        const specDiv = document.createElement('div');
+        specDiv.className = 'spec-item';
+        specDiv.innerHTML = `
+            <input type="text" class="input-field flex-1" placeholder="Nombre (ej: Procesador)" id="spec_name_${specCount}">
+            <input type="text" class="input-field flex-1" placeholder="Valor (ej: Quad-core 1.4GHz)" id="spec_value_${specCount}">
+            <button type="button" onclick="removeSpecification(this)" class="btn-danger px-3 py-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        `;
+        container.appendChild(specDiv);
+    }
+    
+    // Eliminar especificación
+    function removeSpecification(button) {
+        button.parentElement.remove();
+    }
+    
+    // Agregar tag
+    function addTag() {
+        const input = document.getElementById('tagInput');
+        const tagValue = input.value.trim();
+        
+        if (tagValue && !tags.includes(tagValue)) {
+            tags.push(tagValue);
+            renderTags();
+            input.value = '';
+        }
+    }
+    
+    // Eliminar tag
+    function removeTag(tagToRemove) {
+        tags = tags.filter(tag => tag !== tagToRemove);
+        renderTags();
+    }
+    
+    // Renderizar tags
+    function renderTags() {
+        const container = document.getElementById('tagContainer');
+        container.innerHTML = '';
+        
+        tags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag';
+            tagElement.innerHTML = `
+                ${tag}
+                <span class="remove-tag" onclick="removeTag('${tag}')">×</span>
+            `;
+            container.appendChild(tagElement);
+        });
+    }
+    
+    // Manejo de imágenes
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreview = document.getElementById('imagePreview');
+    
+    // Prevenir comportamiento por defecto del drag & drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Highlight del área de drop
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        dropArea.classList.add('dragover');
+    }
+    
+    function unhighlight() {
+        dropArea.classList.remove('dragover');
+    }
+    
+    // Manejar archivos soltados
+    dropArea.addEventListener('drop', handleDrop, false);
+    fileInput.addEventListener('change', handleFiles, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles({ target: { files } });
+    }
+    
+    function handleFiles(e) {
+        const files = [...e.target.files];
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'image-preview-item';
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <div class="remove-image" onclick="this.parentElement.remove()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </div>
+                    `;
+                    imagePreview.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Validación del formulario
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Aquí iría la lógica de guardado
+        alert('Producto guardado correctamente');
+        
+        // Simular redirección o limpieza
+        setTimeout(() => {
+            window.location.href = '#';
+        }, 1500);
+    });
+    
+    // Agregar algunas especificaciones por defecto
+    window.addEventListener('load', function() {
+        addSpecification(); // CPU
+        addSpecification(); // RAM
+        addSpecification(); // Almacenamiento
+    });
+    
+    // Enter para agregar tags
+    document.getElementById('tagInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag();
+        }
+    });
+</script>
+</body>
+</html>
