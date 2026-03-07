@@ -6,6 +6,7 @@
     <title>InfiniHon Store - Hardware Especializado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -104,9 +105,137 @@
             transform: translateY(-4px);
             box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
         }
+
+        /* Estilos del carrito */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: #0a0f1f;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+        }
+
+        .cart-overlay.open {
+            display: block;
+        }
+
+        .cart-item {
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .btn-comprar-ya {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+
+        .btn-comprar-ya:hover {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+        }
     </style>
 </head>
 <body class="min-h-screen relative overflow-x-hidden">
+
+<!-- Notificación -->
+<div id="notification" class="notification flex items-center gap-2">
+    <i class="fas fa-check-circle"></i>
+    <span id="notificationMessage">Producto añadido al carrito</span>
+</div>
+
+<!-- Overlay del carrito -->
+<div id="cartOverlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- Sidebar del carrito -->
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="p-6 h-full flex flex-col">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-white font-bold text-xl flex items-center gap-2">
+                <i class="fas fa-shopping-cart text-blue-400"></i>
+                Tu Carrito
+            </h2>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Items del carrito -->
+        <div id="cartItems" class="flex-1 overflow-y-auto space-y-4">
+            <!-- Los items se agregarán dinámicamente aquí -->
+        </div>
+
+        <!-- Total y botones -->
+        <div class="border-t border-white/10 pt-4 mt-4">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-400">Subtotal:</span>
+                <span id="cartSubtotal" class="text-white font-bold text-xl">$0</span>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-400">Envío:</span>
+                <span class="text-green-400">Gratis</span>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-400">Total:</span>
+                <span id="cartTotal" class="text-blue-400 font-bold text-2xl">$0</span>
+            </div>
+            <div class="space-y-3">
+                <button onclick="procederPago()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-xl font-medium hover:from-blue-700 hover:to-cyan-700 transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-credit-card"></i>
+                    Proceder al pago
+                </button>
+                <button onclick="vaciarCarrito()" class="w-full bg-white/5 border border-white/10 text-gray-300 py-3 rounded-xl font-medium hover:bg-white/10 transition-all">
+                    Vaciar carrito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Header con carrito -->
 <nav class="relative z-30 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl sticky top-0">
@@ -124,9 +253,9 @@
                     <a href="tienda.html" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">Tienda</a>
                     <a href="soporte.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Soporte</a>
                 </div>
-                <button class="relative">
+                <button onclick="toggleCart()" class="relative" id="cartButton">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                    <span class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
@@ -291,10 +420,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(1)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(1)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -349,10 +483,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(2)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(2)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -407,10 +546,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(3)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(3)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -465,10 +609,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(4)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(4)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -523,10 +672,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(5)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(5)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -581,10 +735,15 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                            Añadir al carrito
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="agregarAlCarrito(6)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                                Añadir
+                            </button>
+                            <button onclick="comprarAhora(6)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                                <i class="fas fa-bolt"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -658,8 +817,192 @@
     </div>
 </footer>
 
-<!-- Script para funcionalidad de especificaciones colapsables -->
+<!-- Script para funcionalidad de especificaciones colapsables y carrito -->
 <script>
+    // Base de datos de productos
+    const productos = [
+        { id: 1, nombre: 'MikroTik RB4011', precio: 299.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Router' },
+        { id: 2, nombre: 'Raspberry Pi 5', precio: 79.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Placa' },
+        { id: 3, nombre: 'MikroTik hAP ax²', precio: 159.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Accesorio' },
+        { id: 4, nombre: 'PoE+ HAT', precio: 29.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Accesorio' },
+        { id: 5, nombre: 'MikroTik CSS610', precio: 189.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Switch' },
+        { id: 6, nombre: 'Raspberry Pi 4 8GB', precio: 119.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Placa' }
+    ];
+
+    // Carrito de compras
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    // Función para mostrar notificación
+    function mostrarNotificacion(mensaje) {
+        const notification = document.getElementById('notification');
+        const messageSpan = document.getElementById('notificationMessage');
+        messageSpan.textContent = mensaje;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // Función para toggle del carrito
+    function toggleCart() {
+        const sidebar = document.getElementById('cartSidebar');
+        const overlay = document.getElementById('cartOverlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+        actualizarCarritoDisplay();
+    }
+
+    // Función para agregar al carrito
+    function agregarAlCarrito(productoId) {
+        const producto = productos.find(p => p.id === productoId);
+        const existente = carrito.find(item => item.id === productoId);
+        
+        if (existente) {
+            existente.cantidad += 1;
+        } else {
+            carrito.push({
+                ...producto,
+                cantidad: 1
+            });
+        }
+        
+        guardarCarrito();
+        actualizarContadorCarrito();
+        actualizarCarritoDisplay();
+        mostrarNotificacion(`${producto.nombre} añadido al carrito`);
+    }
+
+    // Función para comprar ahora
+    function comprarAhora(productoId) {
+        agregarAlCarrito(productoId);
+        toggleCart();
+    }
+
+    // Función para eliminar del carrito
+    function eliminarDelCarrito(productoId) {
+        carrito = carrito.filter(item => item.id !== productoId);
+        guardarCarrito();
+        actualizarContadorCarrito();
+        actualizarCarritoDisplay();
+        mostrarNotificacion('Producto eliminado del carrito');
+    }
+
+    // Función para actualizar cantidad
+    function actualizarCantidad(productoId, nuevaCantidad) {
+        if (nuevaCantidad < 1) {
+            eliminarDelCarrito(productoId);
+            return;
+        }
+        
+        const item = carrito.find(item => item.id === productoId);
+        if (item) {
+            item.cantidad = nuevaCantidad;
+            guardarCarrito();
+            actualizarContadorCarrito();
+            actualizarCarritoDisplay();
+        }
+    }
+
+    // Función para vaciar carrito
+    function vaciarCarrito() {
+        if (carrito.length === 0) return;
+        
+        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+            carrito = [];
+            guardarCarrito();
+            actualizarContadorCarrito();
+            actualizarCarritoDisplay();
+            mostrarNotificacion('Carrito vaciado');
+        }
+    }
+
+    // Función para proceder al pago
+    function procederPago() {
+        if (carrito.length === 0) {
+            mostrarNotificacion('El carrito está vacío');
+            return;
+        }
+        
+        // Aquí puedes redirigir a la página de pago
+        window.location.href = 'checkout.html';
+    }
+
+    // Función para guardar carrito en localStorage
+    function guardarCarrito() {
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+    }
+
+    // Función para actualizar contador del carrito
+    function actualizarContadorCarrito() {
+        const contador = document.getElementById('cartCount');
+        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+        contador.textContent = totalItems;
+        
+        if (totalItems > 0) {
+            contador.classList.add('pulse-animation');
+        } else {
+            contador.classList.remove('pulse-animation');
+        }
+    }
+
+    // Función para actualizar display del carrito
+    function actualizarCarritoDisplay() {
+        const cartItems = document.getElementById('cartItems');
+        const subtotalSpan = document.getElementById('cartSubtotal');
+        const totalSpan = document.getElementById('cartTotal');
+        
+        if (carrito.length === 0) {
+            cartItems.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400">Tu carrito está vacío</p>
+                    <button onclick="toggleCart()" class="text-blue-400 hover:text-blue-300 text-sm mt-2">
+                        Continuar comprando
+                    </button>
+                </div>
+            `;
+            subtotalSpan.textContent = '$0';
+            totalSpan.textContent = '$0';
+            return;
+        }
+        
+        let html = '';
+        let subtotal = 0;
+        
+        carrito.forEach(item => {
+            subtotal += item.precio * item.cantidad;
+            html += `
+                <div class="cart-item bg-white/5 rounded-xl p-3">
+                    <div class="flex gap-3">
+                        <img src="${item.imagen}" alt="${item.nombre}" class="w-16 h-16 object-contain">
+                        <div class="flex-1">
+                            <h4 class="text-white font-medium text-sm">${item.nombre}</h4>
+                            <p class="text-blue-400 text-sm font-bold">$${item.precio.toFixed(2)}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="actualizarCantidad(${item.id}, ${item.cantidad - 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <span class="text-white text-sm w-6 text-center">${item.cantidad}</span>
+                                <button onclick="actualizarCantidad(${item.id}, ${item.cantidad + 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                                <button onclick="eliminarDelCarrito(${item.id})" class="ml-auto text-gray-400 hover:text-red-400">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        cartItems.innerHTML = html;
+        subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+        totalSpan.textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    // Función para toggle de especificaciones
     function toggleSpecs(button) {
         const specs = button.nextElementSibling;
         const icon = button.querySelector('svg');
@@ -673,12 +1016,28 @@
         }
     }
 
-    // Inicializar especificaciones (todas cerradas por defecto)
+    // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar especificaciones cerradas
         const specButtons = document.querySelectorAll('.specs-collapsible');
         specButtons.forEach(spec => {
             spec.classList.remove('open');
         });
+        
+        // Actualizar carrito
+        actualizarContadorCarrito();
+    });
+
+    // Cerrar carrito con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+        }
     });
 </script>
 </body>
