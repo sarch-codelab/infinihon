@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InfiniHon Store - Hardware Especializado</title>
+    
+    <!-- Import Map para SQLite Cloud -->
+    <script type="importmap">
+        {
+            "imports": {
+                "@sqlitecloud/drivers": "https://esm.sh/@sqlitecloud/drivers@latest"
+            }
+        }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -20,7 +30,6 @@
                               radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
         }
         
-        /* Efecto de reflejo para imágenes */
         .product-image-container {
             position: relative;
             overflow: hidden;
@@ -45,7 +54,6 @@
             }
         }
         
-        /* Efecto de reflejo espejo */
         .mirror-effect {
             position: relative;
             display: inline-block;
@@ -64,7 +72,6 @@
             pointer-events: none;
         }
         
-        /* Scrollbar personalizada */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -84,7 +91,6 @@
             background: rgba(59, 130, 246, 0.5);
         }
         
-        /* Animación para especificaciones */
         .specs-collapsible {
             max-height: 0;
             overflow: hidden;
@@ -95,7 +101,6 @@
             max-height: 300px;
         }
         
-        /* Hover efecto para tarjetas */
         .product-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -106,7 +111,6 @@
             box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
         }
 
-        /* Estilos del carrito */
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -179,6 +183,29 @@
         .btn-comprar-ya:hover {
             background: linear-gradient(135deg, #ea580c, #c2410c);
         }
+
+        .loading-spinner {
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="min-h-screen relative overflow-x-hidden">
@@ -205,12 +232,14 @@
             </button>
         </div>
 
-        <!-- Items del carrito -->
         <div id="cartItems" class="flex-1 overflow-y-auto space-y-4">
-            <!-- Los items se agregarán dinámicamente aquí -->
+            <!-- Los items se cargan dinámicamente -->
+            <div class="text-center py-8">
+                <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-3"></i>
+                <p class="text-gray-400">Cargando carrito...</p>
+            </div>
         </div>
 
-        <!-- Total y botones -->
         <div class="border-t border-white/10 pt-4 mt-4">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-gray-400">Subtotal:</span>
@@ -242,8 +271,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center space-x-2">
-                
-                <span class="text-white font-bold text-xl tracking-tight">𝓘𝓷𝓯𝓲𝓷𝓲<span class="text-blue-400">𝓗𝓸𝓷</span></span>
+                <span class="text-white font-bold text-xl tracking-tight">Infini<span class="text-blue-400">Hon</span></span>
                 <span class="ml-4 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">Store</span>
             </div>
             <div class="flex items-center gap-6">
@@ -278,7 +306,7 @@
 
     <div class="flex flex-col lg:flex-row gap-8">
         
-        <!-- Sidebar de filtros - transparente -->
+        <!-- Sidebar de filtros -->
         <aside class="lg:w-64 flex-shrink-0">
             <div class="sticky top-24 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
                 <h2 class="text-white font-semibold mb-4 flex items-center gap-2">
@@ -286,30 +314,15 @@
                     Filtros
                 </h2>
                 
-                <!-- Categorías -->
+                <!-- Categorías desde la BD -->
                 <div class="mb-6">
                     <h3 class="text-sm font-medium text-gray-300 mb-3">Categorías</h3>
-                    <div class="space-y-2">
-                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
-                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20" checked>
-                            <span class="text-sm">Routers MikroTik</span>
-                            <span class="text-xs text-gray-500 ml-auto">12</span>
-                        </label>
-                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
-                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
-                            <span class="text-sm">Placas Raspberry Pi</span>
-                            <span class="text-xs text-gray-500 ml-auto">8</span>
-                        </label>
-                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
-                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
-                            <span class="text-sm">Accesorios</span>
-                            <span class="text-xs text-gray-500 ml-auto">15</span>
-                        </label>
-                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
-                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
-                            <span class="text-sm">Servidores</span>
-                            <span class="text-xs text-gray-500 ml-auto">6</span>
-                        </label>
+                    <div id="categorias-container" class="space-y-2">
+                        <!-- Se cargan dinámicamente -->
+                        <div class="text-center py-4">
+                            <div class="loading-spinner mx-auto"></div>
+                            <p class="text-gray-400 text-sm mt-2">Cargando categorías...</p>
+                        </div>
                     </div>
                 </div>
 
@@ -329,10 +342,6 @@
                             <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
                             <span class="text-sm">Empresarial</span>
                         </label>
-                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
-                            <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
-                            <span class="text-sm">Profesional</span>
-                        </label>
                     </div>
                 </div>
 
@@ -340,13 +349,13 @@
                 <div class="mb-6">
                     <h3 class="text-sm font-medium text-gray-300 mb-3">Precio</h3>
                     <div class="flex items-center gap-2">
-                        <input type="number" placeholder="Min" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                        <input type="number" id="precio-min" placeholder="Min" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
                         <span class="text-gray-500">-</span>
-                        <input type="number" placeholder="Max" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                        <input type="number" id="precio-max" placeholder="Max" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
 
-                <button class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-cyan-700 transition-all">
+                <button onclick="aplicarFiltros()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-cyan-700 transition-all">
                     Aplicar filtros
                 </button>
             </div>
@@ -356,399 +365,25 @@
         <div class="flex-1">
             <!-- Cabecera de resultados -->
             <div class="flex justify-between items-center mb-6">
-                <p class="text-gray-400 text-sm">Mostrando <span class="text-white font-medium">12</span> productos</p>
-                <select class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500">
-                    <option class="bg-gray-900">Ordenar por: Destacados</option>
-                    <option class="bg-gray-900">Precio: menor a mayor</option>
-                    <option class="bg-gray-900">Precio: mayor a menor</option>
-                    <option class="bg-gray-900">Novedades</option>
+                <p class="text-gray-400 text-sm">Mostrando <span id="product-count" class="text-white font-medium">0</span> productos</p>
+                <select id="ordenar-por" class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500">
+                    <option class="bg-gray-900" value="destacados">Ordenar por: Destacados</option>
+                    <option class="bg-gray-900" value="precio-asc">Precio: menor a mayor</option>
+                    <option class="bg-gray-900" value="precio-desc">Precio: mayor a menor</option>
+                    <option class="bg-gray-900" value="novedades">Novedades</option>
                 </select>
             </div>
 
             <!-- Productos Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Producto 1 - Router MikroTik -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="MikroTik RB4011" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">MikroTik RB4011</h3>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Router</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">Router de 10 puertos Gigabit, CPU quad-core</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#374151" stroke="#9ca3af"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(24)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$299<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
-                        </div>
-
-                        <!-- Especificaciones colapsables -->
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">CPU</span>
-                                    <span class="text-white">Quad-core 1.4GHz</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">RAM</span>
-                                    <span class="text-white">1GB</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Puertos</span>
-                                    <span class="text-white">10x Gigabit</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">PoE</span>
-                                    <span class="text-white">Sí</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(1)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(1)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 2 - Raspberry Pi 5 -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="Raspberry Pi 5" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">Raspberry Pi 5</h3>
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Placa</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">4GB RAM, CPU Cortex-A76, GPU VideoCore VII</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#374151" stroke="#9ca3af"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(56)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$79<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded-full">Stock bajo</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">CPU</span>
-                                    <span class="text-white">Cortex-A76</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">RAM</span>
-                                    <span class="text-white">4GB LPDDR4X</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">GPU</span>
-                                    <span class="text-white">VideoCore VII</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">Puertos</span>
-                                    <span class="text-white">2x HDMI 4K</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(2)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(2)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 3 - MikroTik hAP ax² -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="MikroTik hAP ax²" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">MikroTik hAP ax²</h3>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Accesorio</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">Router WiFi 6 dual-band, 5 puertos Gigabit</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(18)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$159<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">WiFi</span>
-                                    <span class="text-white">AX3000</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Puertos</span>
-                                    <span class="text-white">5x Gigabit</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">USB</span>
-                                    <span class="text-white">3.0</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">PoE</span>
-                                    <span class="text-white">Sí</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(3)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(3)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 4 - Raspberry Pi PoE+ HAT -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="Raspberry Pi PoE+ HAT" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">PoE+ HAT</h3>
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Accesorio</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">Módulo PoE+ para Raspberry Pi, ventilador incluido</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(12)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$29<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Voltaje</span>
-                                    <span class="text-white">5V DC</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Potencia</span>
-                                    <span class="text-white">25W</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Ventilador</span>
-                                    <span class="text-white">25x25mm</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">Compatibilidad</span>
-                                    <span class="text-white">Pi 3B+,4,5</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(4)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(4)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 5 - MikroTik CSS610 -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="MikroTik CSS610" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">MikroTik CSS610</h3>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Switch</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">Switch Gigabit 8 puertos, gestión en la nube</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(8)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$189<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">Puertos</span>
-                                    <span class="text-white">8x Gigabit</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">SFP</span>
-                                    <span class="text-white">2x</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">SwOS</span>
-                                    <span class="text-white">Sí</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">PoE</span>
-                                    <span class="text-white">No</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(5)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(5)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 6 - Raspberry Pi 4 8GB -->
-                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
-                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
-                        <div class="mirror-effect aspect-square flex items-center justify-center">
-                            <img src="https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png" alt="Raspberry Pi 4 8GB" class="w-full h-full object-contain drop-shadow-2xl">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-white font-semibold">Raspberry Pi 4 8GB</h3>
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Placa</span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-3">8GB RAM, USB 3.0, dual HDMI 4K</p>
-                        <div class="flex items-center gap-1 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                            <span class="text-gray-400 text-xs ml-1">(34)</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-white">$119<small class="text-gray-400 text-sm font-normal">.99</small></span>
-                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
-                        </div>
-
-                        <div class="mb-4">
-                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
-                                <span class="font-mono text-xs">Especificaciones técnicas</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </button>
-                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">CPU</span>
-                                    <span class="text-white">Cortex-A72</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">RAM</span>
-                                    <span class="text-white">8GB LPDDR4</span>
-                                </div>
-                                <div class="flex justify-between py-1 border-b border-white/5">
-                                    <span class="font-mono">USB 3.0</span>
-                                    <span class="text-white">2 puertos</span>
-                                </div>
-                                <div class="flex justify-between py-1">
-                                    <span class="font-mono">Ethernet</span>
-                                    <span class="text-white">Gigabit</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="agregarAlCarrito(6)" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                                Añadir
-                            </button>
-                            <button onclick="comprarAhora(6)" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
-                                <i class="fas fa-bolt"></i>
-                            </button>
-                        </div>
-                    </div>
+            <div id="productos-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Los productos se cargan dinámicamente -->
+                <div class="col-span-3 text-center py-12">
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400" id="loading-message">Cargando productos desde la nube...</p>
                 </div>
             </div>
 
-            <!-- Paginación -->
+            <!-- Paginación (estática por ahora) -->
             <div class="flex justify-center items-center gap-2 mt-12">
                 <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -756,7 +391,6 @@
                 <button class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center">1</button>
                 <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">2</button>
                 <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">3</button>
-                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">4</button>
                 <span class="text-gray-500">...</span>
                 <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">12</button>
                 <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition flex items-center justify-center">
@@ -784,11 +418,9 @@
             </div>
             <div>
                 <h4 class="text-white font-semibold mb-4">Categorías</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Routers MikroTik</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Raspberry Pi</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Accesorios</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Switches</a></li>
+                <ul class="space-y-2" id="footer-categorias">
+                    <!-- Se cargan dinámicamente -->
+                    <li class="text-gray-400 text-sm">Cargando...</li>
                 </ul>
             </div>
             <div>
@@ -817,228 +449,559 @@
     </div>
 </footer>
 
-<!-- Script para funcionalidad de especificaciones colapsables y carrito -->
-<script>
-    // Base de datos de productos
-    const productos = [
-        { id: 1, nombre: 'MikroTik RB4011', precio: 299.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Router' },
-        { id: 2, nombre: 'Raspberry Pi 5', precio: 79.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Placa' },
-        { id: 3, nombre: 'MikroTik hAP ax²', precio: 159.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Accesorio' },
-        { id: 4, nombre: 'PoE+ HAT', precio: 29.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Accesorio' },
-        { id: 5, nombre: 'MikroTik CSS610', precio: 189.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Switch' },
-        { id: 6, nombre: 'Raspberry Pi 4 8GB', precio: 119.99, imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png', categoria: 'Placa' }
-    ];
+<script type="module">
+// ===========================================
+// CONFIGURACIÓN DE SQLITE CLOUD
+// ===========================================
+import { Database } from '@sqlitecloud/drivers';
 
-    // Carrito de compras
-    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+// TU CONNECTION STRING - YA ESTÁ CORRECTO
+const CONNECTION_STRING = 'sqlitecloud://cxaerd5fvk.g2.sqlite.cloud:8860/infinihon_store.db?apikey=cfHa2k4KOhBzxKL5g484dhAf4xlC4znLp5M6wzirgvc';
 
-    // Función para mostrar notificación
-    function mostrarNotificacion(mensaje) {
-        const notification = document.getElementById('notification');
-        const messageSpan = document.getElementById('notificationMessage');
-        messageSpan.textContent = mensaje;
-        notification.classList.add('show');
+let db = null;
+let productos = [];
+let categorias = [];
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+// ===========================================
+// CONEXIÓN A SQLITE CLOUD
+// ===========================================
+async function conectarDB() {
+    try {
+        console.log('🔄 Conectando a SQLite Cloud...');
         
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
-    }
-
-    // Función para toggle del carrito
-    function toggleCart() {
-        const sidebar = document.getElementById('cartSidebar');
-        const overlay = document.getElementById('cartOverlay');
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('open');
-        actualizarCarritoDisplay();
-    }
-
-    // Función para agregar al carrito
-    function agregarAlCarrito(productoId) {
-        const producto = productos.find(p => p.id === productoId);
-        const existente = carrito.find(item => item.id === productoId);
+        db = new Database(CONNECTION_STRING);
         
-        if (existente) {
-            existente.cantidad += 1;
-        } else {
-            carrito.push({
-                ...producto,
-                cantidad: 1
-            });
+        // Probar conexión
+        const result = await db.sql`SELECT 1 as test`;
+        console.log('✅ Conectado a SQLite Cloud', result);
+        
+        // Actualizar mensaje de carga
+        const loadingMessage = document.getElementById('loading-message');
+        if (loadingMessage) {
+            loadingMessage.textContent = 'Cargando productos...';
         }
         
-        guardarCarrito();
-        actualizarContadorCarrito();
-        actualizarCarritoDisplay();
-        mostrarNotificacion(`${producto.nombre} añadido al carrito`);
-    }
-
-    // Función para comprar ahora
-    function comprarAhora(productoId) {
-        agregarAlCarrito(productoId);
-        toggleCart();
-    }
-
-    // Función para eliminar del carrito
-    function eliminarDelCarrito(productoId) {
-        carrito = carrito.filter(item => item.id !== productoId);
-        guardarCarrito();
-        actualizarContadorCarrito();
-        actualizarCarritoDisplay();
-        mostrarNotificacion('Producto eliminado del carrito');
-    }
-
-    // Función para actualizar cantidad
-    function actualizarCantidad(productoId, nuevaCantidad) {
-        if (nuevaCantidad < 1) {
-            eliminarDelCarrito(productoId);
-            return;
-        }
+        // Cargar datos
+        await cargarCategorias();
+        await cargarProductos();
         
-        const item = carrito.find(item => item.id === productoId);
-        if (item) {
-            item.cantidad = nuevaCantidad;
-            guardarCarrito();
-            actualizarContadorCarrito();
-            actualizarCarritoDisplay();
-        }
+    } catch (error) {
+        console.error('❌ Error:', error);
+        mostrarErrorEnUI('Error de conexión: ' + error.message);
     }
+}
 
-    // Función para vaciar carrito
-    function vaciarCarrito() {
-        if (carrito.length === 0) return;
-        
-        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-            carrito = [];
-            guardarCarrito();
-            actualizarContadorCarrito();
-            actualizarCarritoDisplay();
-            mostrarNotificacion('Carrito vaciado');
-        }
-    }
-
-    // Función para proceder al pago
-    function procederPago() {
-        if (carrito.length === 0) {
-            mostrarNotificacion('El carrito está vacío');
-            return;
-        }
-        
-        // Aquí puedes redirigir a la página de pago
-        window.location.href = 'checkout.html';
-    }
-
-    // Función para guardar carrito en localStorage
-    function guardarCarrito() {
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-    }
-
-    // Función para actualizar contador del carrito
-    function actualizarContadorCarrito() {
-        const contador = document.getElementById('cartCount');
-        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-        contador.textContent = totalItems;
-        
-        if (totalItems > 0) {
-            contador.classList.add('pulse-animation');
-        } else {
-            contador.classList.remove('pulse-animation');
-        }
-    }
-
-    // Función para actualizar display del carrito
-    function actualizarCarritoDisplay() {
-        const cartItems = document.getElementById('cartItems');
-        const subtotalSpan = document.getElementById('cartSubtotal');
-        const totalSpan = document.getElementById('cartTotal');
-        
-        if (carrito.length === 0) {
-            cartItems.innerHTML = `
-                <div class="text-center py-8">
-                    <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-3"></i>
-                    <p class="text-gray-400">Tu carrito está vacío</p>
-                    <button onclick="toggleCart()" class="text-blue-400 hover:text-blue-300 text-sm mt-2">
-                        Continuar comprando
-                    </button>
+// ===========================================
+// MOSTRAR ERROR EN UI
+// ===========================================
+function mostrarErrorEnUI(mensaje) {
+    const productosContainer = document.getElementById('productos-container');
+    const categoriasContainer = document.getElementById('categorias-container');
+    
+    if (productosContainer) {
+        productosContainer.innerHTML = `
+            <div class="col-span-3">
+                <div class="error-message p-6">
+                    <i class="fas fa-exclamation-triangle text-3xl mb-3"></i>
+                    <h3 class="text-lg font-semibold mb-2">Error de conexión</h3>
+                    <p class="text-sm mb-3">${mensaje}</p>
+                    <p class="text-xs text-gray-400">Verifica tu conexión a internet</p>
                 </div>
-            `;
-            subtotalSpan.textContent = '$0';
-            totalSpan.textContent = '$0';
-            return;
+            </div>
+        `;
+    }
+    
+    if (categoriasContainer) {
+        categoriasContainer.innerHTML = `
+            <div class="text-center py-4 text-red-400 text-sm">
+                Error cargando categorías
+            </div>
+        `;
+    }
+}
+
+// ===========================================
+// CARGAR CATEGORÍAS
+// ===========================================
+async function cargarCategorias() {
+    try {
+        categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre;`);
+        
+        const container = document.getElementById('categorias-container');
+        if (!container) return;
+        
+        if (!categorias || categorias.length === 0) {
+            await crearCategoriasDefault();
+            categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre;`);
         }
         
-        let html = '';
-        let subtotal = 0;
+        container.innerHTML = '';
         
-        carrito.forEach(item => {
-            subtotal += item.precio * item.cantidad;
-            html += `
-                <div class="cart-item bg-white/5 rounded-xl p-3">
-                    <div class="flex gap-3">
-                        <img src="${item.imagen}" alt="${item.nombre}" class="w-16 h-16 object-contain">
-                        <div class="flex-1">
-                            <h4 class="text-white font-medium text-sm">${item.nombre}</h4>
-                            <p class="text-blue-400 text-sm font-bold">$${item.precio.toFixed(2)}</p>
-                            <div class="flex items-center gap-2 mt-2">
-                                <button onclick="actualizarCantidad(${item.id}, ${item.cantidad - 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
-                                    <i class="fas fa-minus text-xs"></i>
-                                </button>
-                                <span class="text-white text-sm w-6 text-center">${item.cantidad}</span>
-                                <button onclick="actualizarCantidad(${item.id}, ${item.cantidad + 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
-                                    <i class="fas fa-plus text-xs"></i>
-                                </button>
-                                <button onclick="eliminarDelCarrito(${item.id})" class="ml-auto text-gray-400 hover:text-red-400">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
+        for (const cat of categorias) {
+            const count = await contarProductosPorCategoria(cat.nombre);
+            container.innerHTML += `
+                <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20" value="${cat.nombre}" onchange="window.aplicarFiltros()">
+                    <span class="text-sm">${cat.nombre}</span>
+                    <span class="text-xs text-gray-500 ml-auto">${count}</span>
+                </label>
+            `;
+        }
+        
+        const footerCat = document.getElementById('footer-categorias');
+        if (footerCat) {
+            footerCat.innerHTML = categorias.map(cat => `
+                <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">${cat.nombre}</a></li>
+            `).join('');
+        }
+        
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+    }
+}
+
+// ===========================================
+// CREAR CATEGORÍAS POR DEFECTO
+// ===========================================
+async function crearCategoriasDefault() {
+    const categoriasDefault = [
+        ['Routers MikroTik', 'routers-mikrotik', 'Routers profesionales'],
+        ['Placas Raspberry Pi', 'raspberry-pi', 'Single board computers'],
+        ['Switches', 'switches', 'Switches gestionables'],
+        ['Accesorios', 'accesorios', 'Complementos'],
+        ['Servidores', 'servidores', 'Servidores de alta disponibilidad']
+    ];
+    
+    for (const cat of categoriasDefault) {
+        await db.sql(`
+            INSERT OR IGNORE INTO categorias (nombre, slug, descripcion) 
+            VALUES (?, ?, ?)
+        `, cat);
+    }
+}
+
+// ===========================================
+// CONTAR PRODUCTOS POR CATEGORÍA
+// ===========================================
+async function contarProductosPorCategoria(categoria) {
+    try {
+        const result = await db.sql(`SELECT COUNT(*) as total FROM productos WHERE categoria = ?;`, [categoria]);
+        return result[0]?.total || 0;
+    } catch {
+        return 0;
+    }
+}
+
+// ===========================================
+// CARGAR PRODUCTOS
+// ===========================================
+async function cargarProductos() {
+    try {
+        // Verificar si hay productos
+        const count = await db.sql(`SELECT COUNT(*) as total FROM productos;`);
+        
+        if (count[0].total === 0) {
+            await crearProductosEjemplo();
+        }
+        
+        // Obtener productos activos
+        productos = await db.sql(`
+            SELECT * FROM productos 
+            WHERE estado = 'activo' 
+            ORDER BY destacado DESC, id DESC 
+            LIMIT 12;
+        `);
+        
+        const productCount = document.getElementById('product-count');
+        if (productCount) {
+            productCount.textContent = productos.length;
+        }
+        
+        renderizarProductos(productos);
+        
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        throw error;
+    }
+}
+
+// ===========================================
+// CREAR PRODUCTOS DE EJEMPLO
+// ===========================================
+async function crearProductosEjemplo() {
+    const productosEjemplo = [
+        ['MikroTik RB4011', 'MT-RB4011', 'Routers MikroTik', 299.99, 15, 'Router de 10 puertos Gigabit, CPU quad-core', 1],
+        ['Raspberry Pi 5', 'RPI5-4GB', 'Placas Raspberry Pi', 79.99, 12, '4GB RAM, CPU Cortex-A76', 1],
+        ['MikroTik hAP ax²', 'MT-HAP-AX2', 'Routers MikroTik', 159.99, 28, 'Router WiFi 6 dual-band', 0],
+        ['PoE+ HAT', 'RPI-POE+', 'Accesorios', 29.99, 78, 'Módulo PoE+ para Raspberry Pi', 0],
+        ['MikroTik CSS610', 'MT-CSS610', 'Switches', 189.99, 32, 'Switch Gigabit 8 puertos', 1],
+        ['Raspberry Pi 4 8GB', 'RPI4-8GB', 'Placas Raspberry Pi', 119.99, 23, '8GB RAM, USB 3.0', 0]
+    ];
+    
+    for (const prod of productosEjemplo) {
+        await db.sql(`
+            INSERT INTO productos (nombre, sku, categoria, precio, stock, descripcion_corta, destacado, estado)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'activo')
+        `, prod);
+    }
+}
+
+// ===========================================
+// RENDERIZAR PRODUCTOS
+// ===========================================
+function renderizarProductos(productosList) {
+    const container = document.getElementById('productos-container');
+    if (!container) return;
+    
+    if (!productosList || productosList.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-box-open text-4xl text-gray-600 mb-4"></i>
+                <p class="text-gray-400">No hay productos disponibles</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = productosList.map(prod => `
+        <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+            <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
+                <div class="mirror-effect aspect-square flex items-center justify-center">
+                    <img src="${prod.imagen_principal || 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png'}" 
+                         alt="${prod.nombre}" 
+                         class="w-full h-full object-contain drop-shadow-2xl">
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-white font-semibold">${prod.nombre}</h3>
+                    <span class="text-xs ${getCategoriaColor(prod.categoria)} px-2 py-1 rounded-full">${prod.categoria?.split(' ')[0] || 'Producto'}</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-3">${prod.descripcion_corta || ''}</p>
+                <div class="flex items-center gap-1 mb-3">
+                    ${renderEstrellas(4)}
+                    <span class="text-gray-400 text-xs ml-1">(24)</span>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-2xl font-bold text-white">$${(prod.precio || 0).toFixed(2)}</span>
+                    <span class="text-xs ${(prod.stock || 0) > 10 ? 'text-green-400 bg-green-400/10' : 'text-yellow-400 bg-yellow-400/10'} px-2 py-1 rounded-full">
+                        ${(prod.stock || 0) > 10 ? 'En stock' : (prod.stock || 0) > 0 ? 'Stock bajo' : 'Agotado'}
+                    </span>
+                </div>
+
+                <div class="mb-4">
+                    <button onclick="window.toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
+                        <span class="font-mono text-xs">Especificaciones técnicas</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                        <div class="flex justify-between py-1 border-b border-white/5">
+                            <span class="font-mono">SKU</span>
+                            <span class="text-white">${prod.sku || 'N/A'}</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-white/5">
+                            <span class="font-mono">Stock</span>
+                            <span class="text-white">${prod.stock || 0} unidades</span>
                         </div>
                     </div>
                 </div>
-            `;
-        });
-        
-        cartItems.innerHTML = html;
-        subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
-        totalSpan.textContent = `$${subtotal.toFixed(2)}`;
-    }
 
-    // Función para toggle de especificaciones
-    function toggleSpecs(button) {
-        const specs = button.nextElementSibling;
-        const icon = button.querySelector('svg');
-        
-        specs.classList.toggle('open');
-        
-        if (specs.classList.contains('open')) {
-            icon.style.transform = 'rotate(180deg)';
+                <div class="flex gap-2">
+                    <button onclick="window.agregarAlCarrito(${prod.id}, '${prod.nombre.replace(/'/g, "\\'")}', ${prod.precio})" class="flex-1 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                        Añadir
+                    </button>
+                    <button onclick="window.comprarAhora(${prod.id}, '${prod.nombre.replace(/'/g, "\\'")}', ${prod.precio})" class="btn-comprar-ya text-white px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center">
+                        <i class="fas fa-bolt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getCategoriaColor(categoria) {
+    if (!categoria) return 'bg-gray-500/20 text-gray-400';
+    if (categoria.includes('Router')) return 'bg-blue-500/20 text-blue-400';
+    if (categoria.includes('Raspberry') || categoria.includes('Placas')) return 'bg-purple-500/20 text-purple-400';
+    if (categoria.includes('Switch')) return 'bg-cyan-500/20 text-cyan-400';
+    return 'bg-gray-500/20 text-gray-400';
+}
+
+function renderEstrellas(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
         } else {
-            icon.style.transform = 'rotate(0deg)';
+            stars += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#374151" stroke="#9ca3af"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
         }
     }
+    return stars;
+}
 
-    // Inicialización
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar especificaciones cerradas
-        const specButtons = document.querySelectorAll('.specs-collapsible');
-        specButtons.forEach(spec => {
-            spec.classList.remove('open');
+// ===========================================
+// FILTROS
+// ===========================================
+async function aplicarFiltros() {
+    try {
+        const categoriasSeleccionadas = [];
+        document.querySelectorAll('#categorias-container input:checked').forEach(cb => {
+            categoriasSeleccionadas.push(`'${cb.value}'`);
         });
         
-        // Actualizar carrito
-        actualizarContadorCarrito();
-    });
+        const precioMin = document.getElementById('precio-min')?.value || 0;
+        const precioMax = document.getElementById('precio-max')?.value || 999999;
+        const orden = document.getElementById('ordenar-por')?.value || 'destacados';
+        
+        let query = `SELECT * FROM productos WHERE estado = 'activo' AND precio BETWEEN ${precioMin} AND ${precioMax}`;
+        
+        if (categoriasSeleccionadas.length > 0) {
+            query += ` AND categoria IN (${categoriasSeleccionadas.join(',')})`;
+        }
+        
+        switch(orden) {
+            case 'precio-asc':
+                query += ' ORDER BY precio ASC';
+                break;
+            case 'precio-desc':
+                query += ' ORDER BY precio DESC';
+                break;
+            case 'novedades':
+                query += ' ORDER BY id DESC';
+                break;
+            default:
+                query += ' ORDER BY destacado DESC, id DESC';
+        }
+        
+        query += ' LIMIT 12';
+        
+        const productosFiltrados = await db.sql(query);
+        const productCount = document.getElementById('product-count');
+        if (productCount) {
+            productCount.textContent = productosFiltrados.length;
+        }
+        renderizarProductos(productosFiltrados);
+        
+    } catch (error) {
+        console.error('Error aplicando filtros:', error);
+    }
+}
 
+// ===========================================
+// CARRITO
+// ===========================================
+window.agregarAlCarrito = function(id, nombre, precio) {
+    const existente = carrito.find(item => item.id === id);
+    
+    if (existente) {
+        existente.cantidad += 1;
+    } else {
+        carrito.push({
+            id: id,
+            nombre: nombre,
+            precio: precio,
+            imagen: 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png',
+            cantidad: 1
+        });
+    }
+    
+    guardarCarrito();
+    actualizarContadorCarrito();
+    actualizarCarritoDisplay();
+    mostrarNotificacion(`${nombre} añadido al carrito`);
+};
+
+window.comprarAhora = function(id, nombre, precio) {
+    window.agregarAlCarrito(id, nombre, precio);
+    window.toggleCart();
+};
+
+function eliminarDelCarrito(id) {
+    carrito = carrito.filter(item => item.id !== id);
+    guardarCarrito();
+    actualizarContadorCarrito();
+    actualizarCarritoDisplay();
+    mostrarNotificacion('Producto eliminado del carrito');
+}
+
+function actualizarCantidad(id, nuevaCantidad) {
+    if (nuevaCantidad < 1) {
+        eliminarDelCarrito(id);
+        return;
+    }
+    
+    const item = carrito.find(item => item.id === id);
+    if (item) {
+        item.cantidad = nuevaCantidad;
+        guardarCarrito();
+        actualizarContadorCarrito();
+        actualizarCarritoDisplay();
+    }
+}
+
+function vaciarCarrito() {
+    if (carrito.length === 0) return;
+    
+    if (confirm('¿Estás seguro de vaciar el carrito?')) {
+        carrito = [];
+        guardarCarrito();
+        actualizarContadorCarrito();
+        actualizarCarritoDisplay();
+        mostrarNotificacion('Carrito vaciado');
+    }
+}
+
+function procederPago() {
+    if (carrito.length === 0) {
+        mostrarNotificacion('El carrito está vacío');
+        return;
+    }
+    window.location.href = 'checkout.html';
+}
+
+function guardarCarrito() {
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+
+function actualizarContadorCarrito() {
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+        const total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+        cartCount.textContent = total;
+    }
+}
+
+function actualizarCarritoDisplay() {
+    const cartItems = document.getElementById('cartItems');
+    const subtotalSpan = document.getElementById('cartSubtotal');
+    const totalSpan = document.getElementById('cartTotal');
+    
+    if (!cartItems || !subtotalSpan || !totalSpan) return;
+    
+    if (carrito.length === 0) {
+        cartItems.innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-3"></i>
+                <p class="text-gray-400">Tu carrito está vacío</p>
+                <button onclick="window.toggleCart()" class="text-blue-400 hover:text-blue-300 text-sm mt-2">
+                    Continuar comprando
+                </button>
+            </div>
+        `;
+        subtotalSpan.textContent = '$0';
+        totalSpan.textContent = '$0';
+        return;
+    }
+    
+    let html = '';
+    let subtotal = 0;
+    
+    carrito.forEach(item => {
+        subtotal += item.precio * item.cantidad;
+        html += `
+            <div class="cart-item bg-white/5 rounded-xl p-3">
+                <div class="flex gap-3">
+                    <img src="${item.imagen}" alt="${item.nombre}" class="w-16 h-16 object-contain">
+                    <div class="flex-1">
+                        <h4 class="text-white font-medium text-sm">${item.nombre}</h4>
+                        <p class="text-blue-400 text-sm font-bold">$${item.precio.toFixed(2)}</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <button onclick="actualizarCantidad(${item.id}, ${item.cantidad - 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="text-white text-sm w-6 text-center">${item.cantidad}</span>
+                            <button onclick="actualizarCantidad(${item.id}, ${item.cantidad + 1})" class="text-gray-400 hover:text-white w-6 h-6 rounded bg-white/10 flex items-center justify-center">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                            <button onclick="eliminarDelCarrito(${item.id})" class="ml-auto text-gray-400 hover:text-red-400">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    cartItems.innerHTML = html;
+    subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+    totalSpan.textContent = `$${subtotal.toFixed(2)}`;
+}
+
+// ===========================================
+// FUNCIONES AUXILIARES
+// ===========================================
+window.toggleCart = function() {
+    const sidebar = document.getElementById('cartSidebar');
+    const overlay = document.getElementById('cartOverlay');
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+    }
+};
+
+window.toggleSpecs = function(button) {
+    if (button && button.nextElementSibling) {
+        const specs = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        specs.classList.toggle('open');
+        if (icon) {
+            icon.style.transform = specs.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    }
+};
+
+function mostrarNotificacion(mensaje) {
+    const notification = document.getElementById('notification');
+    const messageSpan = document.getElementById('notificationMessage');
+    
+    if (notification && messageSpan) {
+        messageSpan.textContent = mensaje;
+        notification.classList.add('show');
+        setTimeout(() => notification.classList.remove('show'), 3000);
+    }
+}
+
+// Exponer funciones globalmente
+window.aplicarFiltros = aplicarFiltros;
+window.procederPago = procederPago;
+window.vaciarCarrito = vaciarCarrito;
+window.actualizarCantidad = actualizarCantidad;
+window.eliminarDelCarrito = eliminarDelCarrito;
+
+// ===========================================
+// INICIALIZACIÓN
+// ===========================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando tienda...');
+    
+    // Pequeño delay para asegurar que el DOM está listo
+    setTimeout(async () => {
+        await conectarDB();
+        actualizarContadorCarrito();
+        actualizarCarritoDisplay();
+        
+        const ordenarPor = document.getElementById('ordenar-por');
+        const precioMin = document.getElementById('precio-min');
+        const precioMax = document.getElementById('precio-max');
+        
+        if (ordenarPor) ordenarPor.addEventListener('change', aplicarFiltros);
+        if (precioMin) precioMin.addEventListener('change', aplicarFiltros);
+        if (precioMax) precioMax.addEventListener('change', aplicarFiltros);
+    }, 100);
+    
     // Cerrar carrito con ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const sidebar = document.getElementById('cartSidebar');
-            const overlay = document.getElementById('cartOverlay');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('open');
+            if (sidebar && sidebar.classList.contains('open')) {
+                window.toggleCart();
             }
         }
     });
+});
 </script>
 </body>
 </html>
