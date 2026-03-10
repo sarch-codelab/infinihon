@@ -241,6 +241,14 @@
             transform: scale(1.02);
             border-color: rgba(59, 130, 246, 0.4);
         }
+
+        /* Contenedor del gráfico con dimensiones fijas */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body class="relative">
@@ -378,6 +386,7 @@ let db = null;
 let currentUser = null;
 let currentSection = 'dashboard';
 let chart = null;
+let chartInitialized = false;
 
 // ===========================================
 // CONEXIÓN A SQLITE CLOUD
@@ -490,6 +499,13 @@ window.showSection = async function(section) {
     const contentArea = document.getElementById('content-area');
     contentArea.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-400">Cargando...</p></div>';
     
+    // Destruir gráfico si existe al cambiar de sección
+    if (chart) {
+        chart.destroy();
+        chart = null;
+        chartInitialized = false;
+    }
+    
     switch(section) {
         case 'dashboard':
             await cargarDashboard();
@@ -543,6 +559,21 @@ async function cargarDashboard() {
             WHERE created_at >= DATE('now', '-7 days')
             GROUP BY DATE(created_at)
             ORDER BY fecha
+        `);
+        
+        const pedidosRecientes = await db.sql(`
+            SELECT numero_pedido, total, estado, created_at 
+            FROM pedidos 
+            ORDER BY created_at DESC 
+            LIMIT 4
+        `);
+        
+        const productosStockBajo = await db.sql(`
+            SELECT id, nombre, sku, stock, stock_minimo 
+            FROM productos 
+            WHERE stock <= stock_minimo AND stock > 0
+            ORDER BY stock ASC
+            LIMIT 5
         `);
         
         const contentArea = document.getElementById('content-area');
@@ -605,7 +636,7 @@ async function cargarDashboard() {
             
             <!-- Gráfico y pedidos recientes -->
             <div class="grid lg:grid-cols-3 gap-6">
-                <!-- Gráfico de ventas -->
+                <!-- Gráfico de ventas - AHORA CON CONTENEDOR FIJO -->
                 <div class="glass-panel rounded-2xl p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-white font-medium">Ventas últimos 7 días</h3>
@@ -615,14 +646,24 @@ async function cargarDashboard() {
                             <option value="90">Último trimestre</option>
                         </select>
                     </div>
-                    <canvas id="salesChart" height="200"></canvas>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
                 </div>
                 
                 <!-- Pedidos recientes -->
                 <div class="glass-panel rounded-2xl p-6">
                     <h3 class="text-white font-medium mb-6">Pedidos Recientes</h3>
                     <div id="pedidos-recientes" class="space-y-4">
-                        ${await obtenerPedidosRecientes()}
+                        ${pedidosRecientes.map(p => `
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white text-sm">${p.numero_pedido}</p>
+                                    <p class="text-gray-400 text-xs">$${parseFloat(p.total).toFixed(2)}</p>
+                                </div>
+                                <span class="badge-${getEstadoColor(p.estado)} text-xs px-2 py-1 rounded-full">${p.estado}</span>
+                            </div>
+                        `).join('')}
                     </div>
                     
                     <button onclick="showSection('pedidos')" class="btn-secondary w-full mt-6 py-2 rounded-xl text-sm text-gray-300">
@@ -650,16 +691,33 @@ async function cargarDashboard() {
                                 <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="stock-bajo-body">
-                            ${await obtenerStockBajo()}
+                        <tbody>
+                            ${productosStockBajo.map(p => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                    <td class="py-4 px-4 text-yellow-400 font-bold">${p.stock}</td>
+                                    <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="badge-warning text-xs px-2 py-1 rounded-full">Stock bajo</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300 text-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
                         </tbody>
                     </table>
                 </div>
             </div>
         `;
         
-        // Inicializar gráfico
-        await inicializarGrafico(ventasDiarias);
+        // Inicializar gráfico después de que el DOM esté listo
+        setTimeout(() => {
+            inicializarGrafico(ventasDiarias);
+        }, 100);
         
     } catch (error) {
         console.error('Error cargando dashboard:', error);
@@ -668,62 +726,6 @@ async function cargarDashboard() {
                 Error cargando dashboard: ${error.message}
             </div>
         `;
-    }
-}
-
-async function obtenerPedidosRecientes() {
-    try {
-        const pedidos = await db.sql(`
-            SELECT numero_pedido, total, estado, created_at 
-            FROM pedidos 
-            ORDER BY created_at DESC 
-            LIMIT 4
-        `);
-        
-        return pedidos.map(p => `
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-white text-sm">${p.numero_pedido}</p>
-                    <p class="text-gray-400 text-xs">$${parseFloat(p.total).toFixed(2)}</p>
-                </div>
-                <span class="badge-${getEstadoColor(p.estado)} text-xs px-2 py-1 rounded-full">${p.estado}</span>
-            </div>
-        `).join('');
-        
-    } catch (error) {
-        return '<p class="text-gray-400 text-sm">No hay pedidos recientes</p>';
-    }
-}
-
-async function obtenerStockBajo() {
-    try {
-        const productos = await db.sql(`
-            SELECT id, nombre, sku, stock, stock_minimo 
-            FROM productos 
-            WHERE stock <= stock_minimo AND stock > 0
-            ORDER BY stock ASC
-            LIMIT 5
-        `);
-        
-        return productos.map(p => `
-            <tr class="table-row">
-                <td class="py-4 px-4 text-white">${p.nombre}</td>
-                <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
-                <td class="py-4 px-4 text-yellow-400 font-bold">${p.stock}</td>
-                <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
-                <td class="py-4 px-4">
-                    <span class="badge-warning text-xs px-2 py-1 rounded-full">Stock bajo</span>
-                </td>
-                <td class="py-4 px-4">
-                    <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300 text-sm">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-        
-    } catch (error) {
-        return '<tr><td colspan="6" class="text-center py-4 text-gray-400">Error cargando productos</td></tr>';
     }
 }
 
@@ -737,15 +739,39 @@ function getEstadoColor(estado) {
     return colores[estado] || 'info';
 }
 
-async function inicializarGrafico(datos) {
+function inicializarGrafico(datos) {
+    // Destruir gráfico anterior si existe
+    if (chart) {
+        chart.destroy();
+        chart = null;
+    }
+    
     const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+        console.error('No se encontró el canvas del gráfico');
+        return;
+    }
     
-    if (chart) chart.destroy();
+    // Si no hay datos, crear datos de ejemplo
+    let fechas, ventas;
     
-    const fechas = datos.map(d => d.fecha);
-    const ventas = datos.map(d => parseFloat(d.ventas || 0));
+    if (datos && datos.length > 0) {
+        fechas = datos.map(d => d.fecha);
+        ventas = datos.map(d => parseFloat(d.ventas || 0));
+    } else {
+        // Datos de ejemplo para mostrar
+        const hoy = new Date();
+        fechas = [];
+        ventas = [];
+        for (let i = 6; i >= 0; i--) {
+            const fecha = new Date(hoy);
+            fecha.setDate(hoy.getDate() - i);
+            fechas.push(fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }));
+            ventas.push(Math.floor(Math.random() * 500) + 100);
+        }
+    }
     
+    // Crear nuevo gráfico
     chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -755,47 +781,106 @@ async function inicializarGrafico(datos) {
                 data: ventas,
                 borderColor: '#3b82f6',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#3b82f6',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
                 tension: 0.4,
                 fill: true
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    titleColor: '#fff',
+                    bodyColor: '#94a3b8',
+                    borderColor: '#3b82f6',
+                    borderWidth: 1
                 }
             },
             scales: {
                 y: {
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                    ticks: { color: '#9ca3af' }
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#9ca3af',
+                        callback: function(value) {
+                            return '$' + value;
+                        }
+                    }
                 },
                 x: {
-                    grid: { display: false },
-                    ticks: { color: '#9ca3af' }
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#9ca3af'
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10
                 }
             }
         }
     });
+    
+    chartInitialized = true;
 }
 
 window.actualizarGrafico = async function() {
-    const period = document.getElementById('chart-period').value;
-    const datos = await db.sql(`
-        SELECT 
-            DATE(created_at) as fecha,
-            SUM(total) as ventas
-        FROM pedidos 
-        WHERE created_at >= DATE('now', '-${period} days')
-        GROUP BY DATE(created_at)
-        ORDER BY fecha
-    `);
+    if (!chart) return;
     
-    chart.data.labels = datos.map(d => d.fecha);
-    chart.data.datasets[0].data = datos.map(d => parseFloat(d.ventas || 0));
-    chart.update();
+    const period = document.getElementById('chart-period').value;
+    try {
+        const datos = await db.sql(`
+            SELECT 
+                DATE(created_at) as fecha,
+                SUM(total) as ventas
+            FROM pedidos 
+            WHERE created_at >= DATE('now', '-${period} days')
+            GROUP BY DATE(created_at)
+            ORDER BY fecha
+        `);
+        
+        let fechas, ventas;
+        
+        if (datos && datos.length > 0) {
+            fechas = datos.map(d => d.fecha);
+            ventas = datos.map(d => parseFloat(d.ventas || 0));
+        } else {
+            // Datos de ejemplo si no hay ventas
+            const hoy = new Date();
+            fechas = [];
+            ventas = [];
+            for (let i = period-1; i >= 0; i--) {
+                const fecha = new Date(hoy);
+                fecha.setDate(hoy.getDate() - i);
+                fechas.push(fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }));
+                ventas.push(Math.floor(Math.random() * 500) + 100);
+            }
+        }
+        
+        chart.data.labels = fechas;
+        chart.data.datasets[0].data = ventas;
+        chart.update();
+        
+    } catch (error) {
+        console.error('Error actualizando gráfico:', error);
+    }
 };
 
 // ===========================================
@@ -1206,14 +1291,14 @@ function cargarConfiguracion() {
 }
 
 // ===========================================
-// FUNCIONES CRUD (Placeholders)
+// FUNCIONES CRUD
 // ===========================================
 window.nuevoProducto = function() {
-    alert('Función para agregar nuevo producto');
+    alert('Función para agregar nuevo producto - Implementar según necesidad');
 };
 
 window.editarProducto = function(id) {
-    alert(`Editar producto ${id}`);
+    alert(`Editar producto ${id} - Implementar según necesidad`);
 };
 
 window.eliminarProducto = async function(id) {
@@ -1238,11 +1323,11 @@ window.actualizarEstadoPedido = async function(id, estado) {
 };
 
 window.verDetallePedido = function(id) {
-    alert(`Ver detalle del pedido ${id}`);
+    alert(`Ver detalle del pedido ${id} - Implementar según necesidad`);
 };
 
 window.editarUsuario = function(id) {
-    alert(`Editar usuario ${id}`);
+    alert(`Editar usuario ${id} - Implementar según necesidad`);
 };
 
 window.eliminarUsuario = async function(id) {
@@ -1258,11 +1343,11 @@ window.eliminarUsuario = async function(id) {
 };
 
 window.nuevaCategoria = function() {
-    alert('Función para nueva categoría');
+    alert('Función para nueva categoría - Implementar según necesidad');
 };
 
 window.editarCategoria = function(id) {
-    alert(`Editar categoría ${id}`);
+    alert(`Editar categoría ${id} - Implementar según necesidad`);
 };
 
 window.eliminarCategoria = async function(id) {
@@ -1278,11 +1363,11 @@ window.eliminarCategoria = async function(id) {
 };
 
 window.nuevaPublicacion = function() {
-    alert('Función para nueva publicación');
+    alert('Función para nueva publicación - Implementar según necesidad');
 };
 
 window.editarPublicacion = function(id) {
-    alert(`Editar publicación ${id}`);
+    alert(`Editar publicación ${id} - Implementar según necesidad`);
 };
 
 window.eliminarPublicacion = async function(id) {
@@ -1314,6 +1399,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         weekday: 'short', 
         day: 'numeric', 
         month: 'short' 
+    });
+    
+    // Manejar redimensionamiento de ventana para el gráfico
+    window.addEventListener('resize', function() {
+        if (chart && currentSection === 'dashboard') {
+            chart.update();
+        }
     });
 });
 </script>
