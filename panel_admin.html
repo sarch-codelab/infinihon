@@ -421,7 +421,7 @@ function verificarAuth() {
     const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
     
     if (!savedUser) {
-        window.location.href = 'login.html';
+        window.location.href = 'registro_admin.html';
         return false;
     }
     
@@ -443,7 +443,7 @@ function verificarAuth() {
         return true;
         
     } catch (e) {
-        window.location.href = 'login.html';
+        window.location.href = 'registro_admin.html';
         return false;
     }
 }
@@ -454,7 +454,7 @@ function verificarAuth() {
 window.logout = function() {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
-    window.location.href = 'login.html';
+    window.location.href = 'registro_admin.html';
 };
 
 // ===========================================
