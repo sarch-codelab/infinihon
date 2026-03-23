@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Catálogo de Plugins Minecraft | Élite Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #05070c;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                repeating-linear-gradient(45deg, rgba(59, 130, 246, 0.02) 0px, rgba(59, 130, 246, 0.02) 2px, transparent 2px, transparent 8px);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        /* Glassmorphism Premium */
+        .glass-premium {
+            background: rgba(10, 15, 31, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-premium:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Tarjetas de plugins futuristas */
+        .plugin-card-futurista {
+            background: linear-gradient(135deg, rgba(10, 15, 31, 0.8), rgba(5, 7, 12, 0.9));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .plugin-card-futurista::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .plugin-card-futurista:hover::before {
+            left: 100%;
+        }
+        
+        .plugin-card-futurista:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Icono de plugin con efecto 3D */
+        .plugin-icon-futurista {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #8b5cf6);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .plugin-card-futurista:hover .plugin-icon-futurista {
+            transform: rotate(5deg) scale(1.05);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Badges premium */
+        .badge-premium-futurista {
+            background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+        
+        .badge-free-futurista {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+        
+        .badge-version-futurista {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-version-futurista:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+        
+        /* Filtros futuristas */
+        .filter-tag-futurista {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 0.6rem 1.3rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(4px);
+        }
+        
+        .filter-tag-futurista:hover, .filter-tag-futurista.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border-color: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Barra de búsqueda futurista */
+        .search-input-futurista {
+            background: rgba(10, 15, 31, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 3rem;
+            padding: 1rem 1rem 1rem 3.5rem;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .search-input-futurista:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(10, 15, 31, 0.8);
+        }
+        
+        .search-input-futurista::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+        
+        /* Botones futuristas */
+        .btn-futurista {
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #8b5cf6);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-futurista::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-futurista:hover::before {
+            left: 100%;
+        }
+        
+        .btn-futurista:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-outline-futurista {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-futurista:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Estrellas de rating */
+        .rating-stars {
+            display: inline-flex;
+            gap: 2px;
+        }
+        
+        .star-filled {
+            color: #fbbf24;
+            filter: drop-shadow(0 0 2px #fbbf24);
+        }
+        
+        .star-empty {
+            color: #4b5563;
+        }
+        
+        /* Paginación futurista */
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #9ca3af;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        /* Scrollbar futurista */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 15, 31, 0.8);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #60a5fa, #a855f7);
+        }
+        
+        /* Stats cards */
+        .stat-card-futurista {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.05));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card-futurista:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Efecto de partículas en hover */
+        .particle-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .particle-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            pointer-events: none;
+        }
+        
+        .particle-effect:active::after {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Premium -->
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/90 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center animate-pulse">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <div>
+                    <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
+                    <span class="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">PLUGINS • ÉLITE</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Inicio</a>
+                    <a href="servicios-minecraft.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Servidores</a>
+                    <a href="plugins.html" class="text-white transition-all text-sm font-medium border-b-2 border-blue-400 pb-1">Plugins</a>
+                    <a href="soporte.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Soporte</a>
+                </div>
+                <a href="contacto.html" class="btn-futurista text-white px-5 py-2 rounded-xl text-sm font-medium transition-all">
+                    Contactar
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-5 py-2 mb-6">
+            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span class="text-green-400 text-sm font-mono">+500 PLUGINS DISPONIBLES</span>
+            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+        <h1 class="text-5xl lg:text-6xl font-light text-white mb-4">
+            Catálogo de <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 font-bold">Plugins Élite</span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+            Descubre los mejores plugins para potenciar tu servidor Minecraft. +500 plugins premium y gratuitos, actualizados semanalmente.
+        </p>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="stat-card-futurista rounded-2xl p-4 text-center">
+            <div class="text-3xl mb-2">📦</div>
+            <div class="text-2xl font-bold text-white">500+</div>
+            <div class="text-gray-400 text-xs">Plugins Disponibles</div>
+        </div>
+        <div class="stat-card-futurista rounded-2xl p-4 text-center">
+            <div class="text-3xl mb-2">⬇️</div>
+            <div class="text-2xl font-bold text-white">12.5M</div>
+            <div class="text-gray-400 text-xs">Descargas Totales</div>
+        </div>
+        <div class="stat-card-futurista rounded-2xl p-4 text-center">
+            <div class="text-3xl mb-2">⭐</div>
+            <div class="text-2xl font-bold text-white">4.8</div>
+            <div class="text-gray-400 text-xs">Valoración Media</div>
+        </div>
+        <div class="stat-card-futurista rounded-2xl p-4 text-center">
+            <div class="text-3xl mb-2">👥</div>
+            <div class="text-2xl font-bold text-white">2,847</div>
+            <div class="text-gray-400 text-xs">Servidores Activos</div>
+        </div>
+    </div>
+    
+    <!-- Buscador y filtros futuristas -->
+    <div class="glass-premium rounded-2xl p-6 mb-8">
+        <div class="relative mb-6">
+            <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Buscar plugins por nombre, función o autor..." class="search-input-futurista pl-12">
+        </div>
+        
+        <div class="flex flex-wrap gap-3 justify-center mb-6">
+            <span class="filter-tag-futurista active" data-category="all">🎯 Todos</span>
+            <span class="filter-tag-futurista" data-category="admin">⚙️ Administración</span>
+            <span class="filter-tag-futurista" data-category="economy">💰 Economía</span>
+            <span class="filter-tag-futurista" data-category="minigames">🎮 Minijuegos</span>
+            <span class="filter-tag-futurista" data-category="protection">🛡️ Protección</span>
+            <span class="filter-tag-futurista" data-category="chat">💬 Chat</span>
+            <span class="filter-tag-futurista" data-category="world">🌍 Mundo</span>
+            <span class="filter-tag-futurista" data-category="utility">🔧 Utilidades</span>
+        </div>
+        
+        <div class="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-white/10">
+            <div class="flex gap-4">
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" id="freeOnly" class="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                    <span class="text-gray-400 text-sm group-hover:text-white transition-colors">🎁 Solo gratuitos</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" id="premiumOnly" class="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                    <span class="text-gray-400 text-sm group-hover:text-white transition-colors">💎 Solo premium</span>
+                </label>
+            </div>
+            <select id="sortSelect" class="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500">
+                <option class="bg-gray-900">📊 Ordenar por: Relevancia</option>
+                <option class="bg-gray-900">⬇️ Más descargados</option>
+                <option class="bg-gray-900">⭐ Mejor valorados</option>
+                <option class="bg-gray-900">🆕 Más recientes</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Grid de plugins futurista -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="pluginsGrid">
+        <!-- Los plugins se cargarán dinámicamente -->
+    </div>
+    
+    <!-- Paginación futurista -->
+    <div class="flex justify-center gap-3 mt-12" id="pagination">
+        <!-- Se genera dinámicamente -->
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="glass-premium rounded-3xl p-10 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+        <div class="relative z-10">
+            <div class="text-4xl mb-4">📧</div>
+            <h3 class="text-2xl font-light text-white mb-2">¿Quieres estar al día?</h3>
+            <p class="text-gray-400 mb-6">Recibe novedades de plugins, ofertas exclusivas y más.</p>
+            <div class="flex flex-wrap gap-3 justify-center max-w-md mx-auto">
+                <input type="email" placeholder="Tu email" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                <button class="btn-futurista px-6 py-3 rounded-xl text-white font-medium">Suscribirse</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Premium -->
+<footer class="border-t border-white/5 bg-[#020617]/90 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">Catálogo de plugins premium para servidores Minecraft de alto rendimiento.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-3 10h-5v2h5v-2m0-4h-5v2h5V9Z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 4.8 3.4 8.8 8 9.8v-7h-2v-2h2V9c0-2.2 1.8-4 4-4h2v2h-2c-1.1 0-2 .9-2 2v2h4v2h-4v7c4.6-1 8-5 8-9.8z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Categorías</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Administración</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Economía</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Protección</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Minijuegos</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Recursos</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Documentación</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Tutoriales</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">API</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Soporte técnico</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Contacto</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> plugins@infinihon.com</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg> Discord: /infinihon</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> +34 93 123 45 67</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center">
+            <p class="text-gray-400 text-sm">© 2024 InfiniHon Plugin Store. Todos los derechos reservados. Potenciado por tecnología cuántica.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Base de datos de plugins
+    const plugins = [
+        // Administración
+        { id: 1, name: "EssentialsX", category: "admin", description: "El plugin esencial para cualquier servidor. Comandos básicos, teletransportes, home, warp y más.", icon: "⚙️", version: "1.20.x", downloads: "1.2M", rating: 4.9, premium: false, author: "EssentialsTeam" },
+        { id: 2, name: "LuckPerms", category: "admin", description: "Sistema de permisos avanzado con soporte para múltiples servidores y bases de datos.", icon: "🔑", version: "1.8-1.20", downloads: "890K", rating: 4.9, premium: false, author: "Luck" },
+        { id: 3, name: "WorldGuard", category: "protection", description: "Protección de zonas, control de explosiones, fuego y PvP. Configuración avanzada.", icon: "🛡️", version: "1.20.x", downloads: "950K", rating: 4.8, premium: false, author: "sk89q" },
+        
+        // Economía
+        { id: 4, name: "Vault", category: "economy", description: "API de economía esencial para integrar otros plugins de monedas y tiendas.", icon: "💰", version: "1.7-1.20", downloads: "1.1M", rating: 4.8, premium: false, author: "cereal" },
+        { id: 5, name: "ChestShop", category: "economy", description: "Tiendas en cofres para que los jugadores comercien entre sí fácilmente.", icon: "🏪", version: "1.20.x", downloads: "450K", rating: 4.7, premium: false, author: "RoboMWM" },
+        { id: 6, name: "AuctionHouse", category: "economy", description: "Sistema de subastas y mercado global para que los jugadores vendan sus items.", icon: "🔨", version: "1.16-1.20", downloads: "120K", rating: 4.6, premium: true, author: "Hazeby" },
+        
+        // Minijuegos
+        { id: 7, name: "BedWars", category: "minigames", description: "El popular minijuego de camas. Equipos, generadores y eventos.", icon: "🛏️", version: "1.8-1.20", downloads: "560K", rating: 4.8, premium: true, author: "Tommy" },
+        { id: 8, name: "SkyWars", category: "minigames", description: "Minijuego de SkyWars con múltiples mapas, kits y estadísticas.", icon: "☁️", version: "1.8-1.20", downloads: "620K", rating: 4.7, premium: true, author: "MinigamesTeam" },
+        { id: 9, name: "BuildBattle", category: "minigames", description: "Competición de construcción con votación y temas aleatorios.", icon: "🎨", version: "1.16-1.20", downloads: "89K", rating: 4.5, premium: true, author: "BuildTeam" },
+        
+        // Protección
+        { id: 10, name: "GriefPrevention", category: "protection", description: "Protección de claims y anti-griefing para servidores survival.", icon: "🏠", version: "1.20.x", downloads: "780K", rating: 4.8, premium: false, author: "Puhser" },
+        { id: 11, name: "AntiCheat", category: "protection", description: "Sistema avanzado de detección de trampas y hacks.", icon: "🔍", version: "1.8-1.20", downloads: "340K", rating: 4.6, premium: true, author: "ACTeam" },
+        { id: 12, name: "CoreProtect", category: "protection", description: "Logging y rollback de bloques. Recupera cualquier griefeo.", icon: "📋", version: "1.20.x", downloads: "670K", rating: 4.9, premium: false, author: "Intelli" },
+        
+        // Chat
+        { id: 13, name: "ChatManager", category: "chat", description: "Personalización completa del chat con formatos, colores y menciones.", icon: "💬", version: "1.8-1.20", downloads: "230K", rating: 4.5, premium: true, author: "ChatDev" },
+        { id: 14, name: "DiscordSRV", category: "chat", description: "Integración completa entre Minecraft y Discord. Sincronización de chats.", icon: "🎮", version: "1.8-1.20", downloads: "890K", rating: 4.8, premium: false, author: "Scarsz" },
+        
+        // Mundo
+        { id: 15, name: "Multiverse-Core", category: "world", description: "Gestión de múltiples mundos con portales, generadores y configuraciones.", icon: "🌎", version: "1.20.x", downloads: "780K", rating: 4.7, premium: false, author: "MultiverseTeam" },
+        { id: 16, name: "FastAsyncWorldEdit", category: "world", description: "Editor de mundos optimizado para construcciones masivas.", icon: "✏️", version: "1.20.x", downloads: "450K", rating: 4.8, premium: false, author: "Empire92" },
+        
+        // Utilidades
+        { id: 17, name: "HolographicDisplays", category: "utility", description: "Crea hologramas personalizados para mostrar información.", icon: "📺", version: "1.20.x", downloads: "560K", rating: 4.7, premium: false, author: "Filoghost" },
+        { id: 18, name: "PlaceholderAPI", category: "utility", description: "API de placeholders para mostrar información dinámica en plugins.", icon: "📊", version: "1.8-1.20", downloads: "980K", rating: 4.9, premium: false, author: "PlaceholderAPI" },
+        { id: 19, name: "VotingPlugin", category: "utility", description: "Sistema de votación con recompensas automáticas para promocionar tu servidor.", icon: "🗳️", version: "1.16-1.20", downloads: "210K", rating: 4.5, premium: true, author: "VoteTeam" },
+        { id: 20, name: "Citizens", category: "utility", description: "Crea NPCs interactivos con rutinas, diálogos y funciones personalizadas.", icon: "🤖", version: "1.20.x", downloads: "890K", rating: 4.8, premium: false, author: "CitizensTeam" }
+    ];
+
+    let currentPage = 1;
+    const itemsPerPage = 9;
+    let currentCategory = 'all';
+    let freeOnly = false;
+    let premiumOnly = false;
+    let searchTerm = '';
+
+    // Función para renderizar estrellas
+    function renderStars(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        let stars = '';
+        for (let i = 0; i < fullStars; i++) {
+            stars += '<svg class="w-4 h-4 star-filled" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+        }
+        if (hasHalfStar) {
+            stars += '<svg class="w-4 h-4 star-filled" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+        }
+        const emptyStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < emptyStars; i++) {
+            stars += '<svg class="w-4 h-4 star-empty" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+        }
+        return stars;
+    }
+
+    // Renderizar plugins
+    function renderPlugins() {
+        let filteredPlugins = plugins.filter(plugin => {
+            if (currentCategory !== 'all' && plugin.category !== currentCategory) return false;
+            if (freeOnly && plugin.premium) return false;
+            if (premiumOnly && !plugin.premium) return false;
+            if (searchTerm && !plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
+                !plugin.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                !plugin.author.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+            return true;
+        });
+        
+        const totalPages = Math.ceil(filteredPlugins.length / itemsPerPage);
+        const start = (currentPage - 1) * itemsPerPage;
+        const paginatedPlugins = filteredPlugins.slice(start, start + itemsPerPage);
+        
+        const grid = document.getElementById('pluginsGrid');
+        grid.innerHTML = '';
+        
+        if (paginatedPlugins.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-16">
+                    <div class="text-7xl mb-5 animate-pulse">🔍</div>
+                    <h3 class="text-white text-2xl font-light mb-3">No se encontraron plugins</h3>
+                    <p class="text-gray-400">Prueba con otros filtros o palabras de búsqueda</p>
+                </div>
+            `;
+        } else {
+            paginatedPlugins.forEach(plugin => {
+                const priceBadge = plugin.premium ? 
+                    '<span class="badge-premium-futurista">💎 PREMIUM</span>' : 
+                    '<span class="badge-free-futurista">🎁 GRATUITO</span>';
+                
+                grid.innerHTML += `
+                    <div class="plugin-card-futurista rounded-2xl p-6">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="plugin-icon-futurista">${plugin.icon}</div>
+                            ${priceBadge}
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">${plugin.name}</h3>
+                        <p class="text-gray-400 text-xs mb-3">por ${plugin.author}</p>
+                        <p class="text-gray-300 text-sm mb-4 leading-relaxed">${plugin.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge-version-futurista">📦 ${plugin.version}</span>
+                            <span class="badge-version-futurista">⬇️ ${plugin.downloads}</span>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-1">
+                                <div class="rating-stars">${renderStars(plugin.rating)}</div>
+                                <span class="text-gray-400 text-xs ml-1">(${plugin.rating})</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="viewPlugin(${plugin.id})" class="btn-outline-futurista px-3 py-1.5 rounded-lg text-sm text-white transition-all particle-effect">Ver detalles</button>
+                                <button onclick="installPlugin('${plugin.name}')" class="btn-futurista px-4 py-1.5 rounded-lg text-sm text-white particle-effect">Instalar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        renderPagination(totalPages);
+    }
+    
+    function renderPagination(totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        // Botón anterior
+        pagination.innerHTML += `
+            <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+        `;
+        
+        // Números de página
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, startPage + 4);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            pagination.innerHTML += `
+                <button class="pagination-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">
+                    ${i}
+                </button>
+            `;
+        }
+        
+        if (endPage < totalPages - 1) {
+            pagination.innerHTML += `<span class="text-gray-500 px-2">...</span>`;
+            pagination.innerHTML += `
+                <button class="pagination-btn" onclick="changePage(${totalPages})">
+                    ${totalPages}
+                </button>
+            `;
+        }
+        
+        // Botón siguiente
+        pagination.innerHTML += `
+            <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        `;
+    }
+    
+    function changePage(page) {
+        currentPage = page;
+        renderPlugins();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function viewPlugin(id) {
+        const plugin = plugins.find(p => p.id === id);
+        alert(`📦 ${plugin.name}\n\nDescripción: ${plugin.description}\nAutor: ${plugin.author}\nVersión: ${plugin.version}\nDescargas: ${plugin.downloads}\n\nPróximamente: página de detalles del plugin`);
+    }
+    
+    function installPlugin(name) {
+        alert(`⚡ Instalando ${name}...\n\nRedirigiendo a la página de instalación.`);
+    }
+    
+    // Eventos de filtros
+    document.querySelectorAll('.filter-tag-futurista').forEach(tag => {
+        tag.addEventListener('click', () => {
+            document.querySelectorAll('.filter-tag-futurista').forEach(t => t.classList.remove('active'));
+            tag.classList.add('active');
+            currentCategory = tag.dataset.category;
+            currentPage = 1;
+            renderPlugins();
+        });
+    });
+    
+    document.getElementById('freeOnly').addEventListener('change', (e) => {
+        freeOnly = e.target.checked;
+        if (freeOnly) document.getElementById('premiumOnly').checked = false;
+        premiumOnly = false;
+        currentPage = 1;
+        renderPlugins();
+    });
+    
+    document.getElementById('premiumOnly').addEventListener('change', (e) => {
+        premiumOnly = e.target.checked;
+        if (premiumOnly) document.getElementById('freeOnly').checked = false;
+        freeOnly = false;
+        currentPage = 1;
+        renderPlugins();
+    });
+    
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        currentPage = 1;
+        renderPlugins();
+    });
+    
+    document.getElementById('sortSelect').addEventListener('change', () => {
+        currentPage = 1;
+        renderPlugins();
+    });
+    
+    // Inicializar
+    renderPlugins();
+</script>
+</body>
+</html>
