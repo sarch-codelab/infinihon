@@ -3,497 +3,645 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Servicios Minecraft Premium</title>
+    <title>InfiniHon - Servidores Minecraft | Infraestructura Futurista</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Minecraft&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Inter', sans-serif;
         }
-        
-        .font-minecraft {
-            font-family: 'Minecraft', 'JetBrains Mono', monospace;
-        }
-        
+
         body {
-            background-color: #0a0c10;
-            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
-                              url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect width="16" height="16" fill="rgba(59,130,246,0.03)"/><rect x="16" y="16" width="16" height="16" fill="rgba(6,182,212,0.03)"/></svg>');
-            background-repeat: repeat;
+            background-color: #05070c;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                repeating-linear-gradient(45deg, rgba(59, 130, 246, 0.02) 0px, rgba(59, 130, 246, 0.02) 2px, transparent 2px, transparent 8px);
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        /* Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
+
+        /* Animaciones de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scalePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+            50% { border-color: rgba(139, 92, 246, 0.6); box-shadow: 0 0 40px rgba(139, 92, 246, 0.4); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 0.5; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .animate-fadeInLeft {
+            animation: fadeInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .animate-fadeInRight {
+            animation: fadeInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        /* Glassmorphism Premium */
+        .glass-premium {
+            background: rgba(10, 15, 31, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            transition: all 0.3s ease;
+
+        .glass-premium:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
         }
-        
-        .glass-card:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
-        }
-        
-        /* Efecto bloque Minecraft */
-        .minecraft-block {
-            position: relative;
-            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
-            border: 2px solid #4a4a4a;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 4px 8px rgba(0,0,0,0.3);
-        }
-        
-        .minecraft-block::before {
-            content: '';
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            bottom: 4px;
-            background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
-            pointer-events: none;
-        }
-        
-        /* Botones */
-        .btn-primary {
-            background: linear-gradient(135deg, #1e40af, #3b82f6, #22d3ee);
-            background-size: 200% 200%;
-            transition: all 0.3s ease;
-            animation: gradientShift 3s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.6);
-            transform: translateY(-2px);
-        }
-        
-        /* Planes */
-        .plan-card {
-            transition: all 0.3s ease;
-        }
-        
-        .plan-card:hover {
-            transform: translateY(-8px);
-        }
-        
-        .plan-popular {
-            border: 2px solid #3b82f6;
+
+        /* Tarjetas de planes */
+        .plan-card-futurista {
+            background: linear-gradient(135deg, rgba(10, 15, 31, 0.8), rgba(5, 7, 12, 0.9));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
-        
-        .plan-popular::before {
-            content: 'MÁS POPULAR';
+
+        .plan-card-futurista::before {
+            content: '';
             position: absolute;
-            top: 12px;
-            right: -30px;
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .plan-card-futurista:hover::before {
+            left: 100%;
+        }
+
+        .plan-card-futurista:hover {
+            transform: translateY(-12px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .plan-popular-futurista {
+            border: 2px solid #3b82f6;
+            position: relative;
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+
+        .plan-popular-futurista::after {
+            content: '🔥 MÁS POPULAR';
+            position: absolute;
+            top: 16px;
+            right: -35px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             color: white;
             font-size: 0.7rem;
-            padding: 0.2rem 2rem;
-            transform: rotate(45deg);
             font-weight: bold;
+            padding: 0.25rem 2.5rem;
+            transform: rotate(45deg);
             letter-spacing: 1px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        
-        /* Iconos de Minecraft */
-        .minecraft-icon {
-            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+
+        /* Métricas */
+        .metric-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.05));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
         }
-        
-        /* Animaciones */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
         }
-        
-        .float-animation {
-            animation: float 4s ease-in-out infinite;
+
+        /* Botones futuristas */
+        .btn-futurista {
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #8b5cf6);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        
-        /* Scrollbar */
+
+        .btn-futurista::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-futurista:hover::before {
+            left: 100%;
+        }
+
+        .btn-futurista:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Partículas flotantes */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.6), transparent);
+            border-radius: 50%;
+            animation: float-particle 8s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Efecto de glitch en el hero */
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 0 0 rgba(59, 130, 246, 0.5), -2px 0 0 rgba(139, 92, 246, 0.5); }
+            25% { text-shadow: -3px 0 0 #3b82f6, 3px 0 0 #8b5cf6; }
+            50% { text-shadow: 3px 0 0 #3b82f6, -3px 0 0 #8b5cf6; }
+            75% { text-shadow: -2px 0 0 #3b82f6, 2px 0 0 #8b5cf6; }
+        }
+
+        /* Scrollbar futurista */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(10, 15, 31, 0.8);
         }
-        
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             border-radius: 4px;
         }
-        
-        /* Cursor personalizado */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: #3b82f6;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s;
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #60a5fa, #a855f7);
         }
-        
-        .cursor-ring {
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            border-radius: 50%;
+
+        /* Contenedor de partículas 3D */
+        #particles-3d {
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 9998;
-            transition: all 0.2s ease;
+            z-index: 0;
         }
     </style>
 </head>
 <body>
 
-<!-- Header -->
-<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm">
+<!-- Partículas 3D Canvas -->
+<canvas id="particles-3d"></canvas>
+
+<!-- Header Premium -->
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/90 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center animate-pulse">
                     <span class="text-black font-bold text-xl">I</span>
                 </div>
                 <div>
                     <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
-                    <span class="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">MINECRAFT</span>
+                    <span class="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">MINECRAFT • FUTURISTA</span>
                 </div>
             </div>
             <div class="flex items-center gap-6">
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
-                    <a href="servicios.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
-                    <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
-                    <a href="soporte.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Soporte</a>
+                    <a href="index.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Inicio</a>
+                    <a href="servicios.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Servicios</a>
+                    <a href="tienda.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Tienda</a>
+                    <a href="soporte.html" class="text-white transition-all text-sm font-medium border-b-2 border-blue-400 pb-1">Soporte</a>
                 </div>
-                <a href="contacto.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                    Contratar
+                <a href="contacto.html" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition-all hover:scale-105 shadow-lg">
+                    PLUGINS
                 </a>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-transparent"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+<!-- Hero Section Futurista -->
+<section class="relative overflow-hidden py-20">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-transparent to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center">
-            <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6">
+            <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-5 py-2 mb-8 animate-fadeInUp">
                 <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="text-green-400 text-sm font-mono">SERVIDORES ACTIVOS: 1,247</span>
+                <span class="text-green-400 text-sm font-mono tracking-wider">SERVIDORES ACTIVOS: 2,847</span>
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             </div>
-            <h1 class="text-5xl lg:text-7xl font-bold text-white mb-6">
+            <h1 class="text-6xl lg:text-8xl font-bold text-white mb-6 animate-fadeInUp glitch-text">
                 Servidores Minecraft
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 block mt-2">
-                    Potencia Industrial
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-500 block mt-3">
+                    Potencia Cuántica
                 </span>
             </h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-                Infraestructura de grado industrial para servidores Minecraft de alto rendimiento. 
-                Latencia ultra baja, protección DDoS avanzada y uptime garantizado.
+            <p class="text-gray-400 text-xl max-w-3xl mx-auto mb-10 leading-relaxed animate-fadeInUp delay-100">
+                Infraestructura de última generación para servidores Minecraft de alto rendimiento.
+                <span class="block text-blue-400 mt-2">Latencia 0ms | Protección Cuántica | Uptime 99.999%</span>
             </p>
-            <div class="flex flex-wrap gap-4 justify-center">
-                <a href="#planes" class="btn-primary px-8 py-4 rounded-xl text-white font-medium text-lg flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 7 22 17 12 22 2 17 2 7 12 2"></polygon><line x1="12" y1="22" x2="12" y2="12"></line><line x1="22" y1="7" x2="12" y2="12"></line><line x1="2" y1="7" x2="12" y2="12"></line></svg>
-                    Ver Planes
+            <div class="flex flex-wrap gap-5 justify-center animate-fadeInUp delay-200">
+                <a href="#planes" class="btn-futurista px-10 py-5 rounded-xl text-white font-medium text-lg flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Explorar Planes
                 </a>
-                <a href="#demo" class="btn-secondary px-8 py-4 rounded-xl text-white font-medium text-lg flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    Demo Gratis
+                <a href="#demo" class="glass-premium px-10 py-5 rounded-xl text-white font-medium text-lg flex items-center gap-3 hover:border-blue-500 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0 0 10 9.87v4.263a1 1 0 0 0 1.555.832l3.197-2.132a1 1 0 0 0 0-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path></svg>
+                    Demo Gratis 7 días
                 </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Métricas de rendimiento -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- Métricas de Rendimiento Futuristas -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="glass-card rounded-2xl p-6 text-center">
-            <div class="text-3xl text-blue-400 mb-2">⚡</div>
-            <div class="text-2xl font-bold text-white">99.99%</div>
-            <div class="text-gray-400 text-sm">Uptime Garantizado</div>
+        <div class="metric-card rounded-2xl p-6 text-center animate-fadeInUp">
+            <div class="text-4xl mb-3">⚡</div>
+            <div class="text-3xl font-bold text-white">99.999%</div>
+            <div class="text-gray-400 text-sm mt-1">Uptime Cuántico</div>
+            <div class="text-xs text-blue-400 mt-2">SLA Garantizado</div>
         </div>
-        <div class="glass-card rounded-2xl p-6 text-center">
-            <div class="text-3xl text-blue-400 mb-2">🎮</div>
-            <div class="text-2xl font-bold text-white">0ms</div>
-            <div class="text-gray-400 text-sm">Latencia Óptima</div>
+        <div class="metric-card rounded-2xl p-6 text-center animate-fadeInUp delay-100">
+            <div class="text-4xl mb-3">🎮</div>
+            <div class="text-3xl font-bold text-white">0ms</div>
+            <div class="text-gray-400 text-sm mt-1">Latencia Óptima</div>
+            <div class="text-xs text-blue-400 mt-2">Red de Baja Latencia</div>
         </div>
-        <div class="glass-card rounded-2xl p-6 text-center">
-            <div class="text-3xl text-blue-400 mb-2">🛡️</div>
-            <div class="text-2xl font-bold text-white">1.2 Tbps</div>
-            <div class="text-gray-400 text-sm">Protección DDoS</div>
+        <div class="metric-card rounded-2xl p-6 text-center animate-fadeInUp delay-200">
+            <div class="text-4xl mb-3">🛡️</div>
+            <div class="text-3xl font-bold text-white">2.5 Tbps</div>
+            <div class="text-gray-400 text-sm mt-1">Protección DDoS</div>
+            <div class="text-xs text-blue-400 mt-2">Escudo Cuántico</div>
         </div>
-        <div class="glass-card rounded-2xl p-6 text-center">
-            <div class="text-3xl text-blue-400 mb-2">💾</div>
-            <div class="text-2xl font-bold text-white">NVMe</div>
-            <div class="text-gray-400 text-sm">Almacenamiento Ultra Rápido</div>
+        <div class="metric-card rounded-2xl p-6 text-center animate-fadeInUp delay-300">
+            <div class="text-4xl mb-3">💾</div>
+            <div class="text-3xl font-bold text-white">NVMe Gen4</div>
+            <div class="text-gray-400 text-sm mt-1">Almacenamiento</div>
+            <div class="text-xs text-blue-400 mt-2">7000 MB/s Lectura</div>
         </div>
     </div>
 </section>
 
-<!-- Planes de Servicio -->
+<!-- Planes de Servicio Futuristas -->
 <section id="planes" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-light text-white mb-4">Planes para tu Servidor</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto">Elige el plan perfecto para tu comunidad. Todos incluyen soporte 24/7 y panel de control.</p>
+    <div class="text-center mb-16">
+        <h2 class="text-4xl lg:text-5xl font-light text-white mb-4 animate-fadeInUp">Planes de <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Potencia Cuántica</span></h2>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto animate-fadeInUp delay-100">Elige la potencia que tu comunidad necesita. Todos los planes incluyen soporte 24/7 y panel de control avanzado.</p>
     </div>
     
     <div class="grid lg:grid-cols-4 gap-6">
         <!-- Plan Básico -->
-        <div class="plan-card glass-card rounded-2xl p-6 text-center">
-            <div class="text-4xl mb-4">🌿</div>
-            <h3 class="text-xl font-bold text-white mb-2">Básico</h3>
-            <p class="text-gray-400 text-sm mb-4">Para servidores pequeños</p>
-            <div class="text-3xl font-bold text-white mb-4">$9.99<span class="text-sm text-gray-400">/mes</span></div>
-            <ul class="space-y-3 text-sm text-gray-300 mb-6">
-                <li>✅ 2GB RAM Dedicada</li>
-                <li>✅ 20 jugadores simultáneos</li>
-                <li>✅ 50GB SSD NVMe</li>
-                <li>✅ Protección DDoS básica</li>
-                <li>✅ Panel Pterodactyl</li>
+        <div class="plan-card-futurista rounded-2xl p-6 text-center animate-fadeInUp delay-100">
+            <div class="text-5xl mb-4">🌱</div>
+            <h3 class="text-2xl font-bold text-white mb-2">Básico</h3>
+            <p class="text-gray-400 text-sm mb-4">Para comunidades emergentes</p>
+            <div class="text-4xl font-bold text-white mb-5">$9.99<span class="text-base text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 2GB RAM Dedicada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 25 jugadores simultáneos</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 50GB NVMe Gen4</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Protección DDoS Básica</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Panel Pterodactyl</li>
             </ul>
-            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+            <a href="#contratar" class="glass-premium block py-3 rounded-xl text-white text-sm font-medium hover:border-blue-500 transition-all">Seleccionar Plan</a>
         </div>
         
-        <!-- Plan Profesional -->
-        <div class="plan-card glass-card rounded-2xl p-6 text-center plan-popular">
-            <div class="text-4xl mb-4">⚡</div>
-            <h3 class="text-xl font-bold text-white mb-2">Profesional</h3>
+        <!-- Plan Profesional (Popular) -->
+        <div class="plan-card-futurista rounded-2xl p-6 text-center animate-fadeInUp delay-200 plan-popular-futurista">
+            <div class="text-5xl mb-4">⚡</div>
+            <h3 class="text-2xl font-bold text-white mb-2">Profesional</h3>
             <p class="text-gray-400 text-sm mb-4">Ideal para comunidades medianas</p>
-            <div class="text-3xl font-bold text-white mb-4">$24.99<span class="text-sm text-gray-400">/mes</span></div>
-            <ul class="space-y-3 text-sm text-gray-300 mb-6">
-                <li>✅ 6GB RAM Dedicada</li>
-                <li>✅ 60 jugadores simultáneos</li>
-                <li>✅ 150GB SSD NVMe</li>
-                <li>✅ Protección DDoS avanzada</li>
-                <li>✅ Panel + FTP acceso</li>
-                <li>✅ Copias de seguridad diarias</li>
+            <div class="text-4xl font-bold text-white mb-5">$24.99<span class="text-base text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 6GB RAM Dedicada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 75 jugadores simultáneos</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 150GB NVMe Gen4</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Protección DDoS Avanzada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Backups automáticos diarios</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Soporte prioritario</li>
             </ul>
-            <a href="#contratar" class="btn-primary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+            <a href="#contratar" class="btn-futurista block py-3 rounded-xl text-white text-sm font-medium">Seleccionar Plan</a>
         </div>
         
         <!-- Plan Empresarial -->
-        <div class="plan-card glass-card rounded-2xl p-6 text-center">
-            <div class="text-4xl mb-4">🏆</div>
-            <h3 class="text-xl font-bold text-white mb-2">Empresarial</h3>
+        <div class="plan-card-futurista rounded-2xl p-6 text-center animate-fadeInUp delay-300">
+            <div class="text-5xl mb-4">🏆</div>
+            <h3 class="text-2xl font-bold text-white mb-2">Empresarial</h3>
             <p class="text-gray-400 text-sm mb-4">Para grandes comunidades</p>
-            <div class="text-3xl font-bold text-white mb-4">$49.99<span class="text-sm text-gray-400">/mes</span></div>
-            <ul class="space-y-3 text-sm text-gray-300 mb-6">
-                <li>✅ 12GB RAM Dedicada</li>
-                <li>✅ 120 jugadores simultáneos</li>
-                <li>✅ 300GB SSD NVMe</li>
-                <li>✅ Protección DDoS empresarial</li>
-                <li>✅ CPU dedicado (2 núcleos)</li>
-                <li>✅ Soporte prioritario 24/7</li>
+            <div class="text-4xl font-bold text-white mb-5">$49.99<span class="text-base text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 12GB RAM Dedicada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 150 jugadores simultáneos</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 300GB NVMe Gen4</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> CPU Dedicado (2 núcleos)</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Protección DDoS Empresarial</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Soporte 24/7 prioritario</li>
             </ul>
-            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+            <a href="#contratar" class="glass-premium block py-3 rounded-xl text-white text-sm font-medium hover:border-blue-500 transition-all">Seleccionar Plan</a>
         </div>
         
-        <!-- Plan Ultra -->
-        <div class="plan-card glass-card rounded-2xl p-6 text-center">
-            <div class="text-4xl mb-4">👑</div>
-            <h3 class="text-xl font-bold text-white mb-2">Ultra</h3>
+        <!-- Plan Ultra (Nuevo) -->
+        <div class="plan-card-futurista rounded-2xl p-6 text-center animate-fadeInUp delay-400">
+            <div class="text-5xl mb-4">👑</div>
+            <h3 class="text-2xl font-bold text-white mb-2">Ultra</h3>
             <p class="text-gray-400 text-sm mb-4">Máximo rendimiento</p>
-            <div class="text-3xl font-bold text-white mb-4">$99.99<span class="text-sm text-gray-400">/mes</span></div>
-            <ul class="space-y-3 text-sm text-gray-300 mb-6">
-                <li>✅ 24GB RAM Dedicada</li>
-                <li>✅ 250+ jugadores simultáneos</li>
-                <li>✅ 500GB SSD NVMe</li>
-                <li>✅ Protección DDoS ilimitada</li>
-                <li>✅ CPU dedicado (4 núcleos)</li>
-                <li>✅ Soporte VIP + asesor técnico</li>
-                <li>✅ Servidor dedicado</li>
+            <div class="text-4xl font-bold text-white mb-5">$99.99<span class="text-base text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 24GB RAM Dedicada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 300+ jugadores simultáneos</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 500GB NVMe Gen4</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> CPU Dedicado (4 núcleos)</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Protección DDoS Ilimitada</li>
+                <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Servidor Dedicado</li>
             </ul>
-            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+            <a href="#contratar" class="glass-premium block py-3 rounded-xl text-white text-sm font-medium hover:border-blue-500 transition-all">Seleccionar Plan</a>
         </div>
     </div>
 </section>
 
-<!-- Características Destacadas -->
+<!-- Características Destacadas con Animaciones -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="glass-panel rounded-3xl p-12">
+    <div class="glass-premium rounded-3xl p-12">
         <div class="grid md:grid-cols-2 gap-12">
-            <div>
-                <h2 class="text-3xl font-light text-white mb-6">¿Por qué elegir InfiniHon para tu servidor?</h2>
-                <div class="space-y-4">
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">⚡</div>
+            <div class="space-y-6 animate-fadeInLeft">
+                <h2 class="text-4xl font-light text-white mb-6">Tecnología de <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Vanguardia</span></h2>
+                <div class="space-y-5">
+                    <div class="flex gap-4 group cursor-pointer">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">⚡</div>
                         <div>
-                            <h3 class="text-white font-medium">Hardware de última generación</h3>
-                            <p class="text-gray-400 text-sm">Procesadores AMD EPYC / Intel Xeon, RAM DDR5 ECC, almacenamiento NVMe</p>
+                            <h3 class="text-white font-medium text-lg">Hardware de Última Generación</h3>
+                            <p class="text-gray-400 text-sm">Procesadores AMD EPYC Genoa / Intel Xeon Scalable, RAM DDR5 ECC, Almacenamiento NVMe Gen4</p>
                         </div>
                     </div>
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🌎</div>
+                    <div class="flex gap-4 group cursor-pointer">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">🌍</div>
                         <div>
-                            <h3 class="text-white font-medium">Ubicación global</h3>
-                            <p class="text-gray-400 text-sm">Data centers en Norteamérica, Europa, Asia y Latinoamérica</p>
+                            <h3 class="text-white font-medium text-lg">Red Global de Baja Latencia</h3>
+                            <p class="text-gray-400 text-sm">Data centers en 12 regiones globales con conexiones optimizadas para menor latencia</p>
                         </div>
                     </div>
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🎮</div>
+                    <div class="flex gap-4 group cursor-pointer">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">🛡️</div>
                         <div>
-                            <h3 class="text-white font-medium">Optimización Minecraft</h3>
-                            <p class="text-gray-400 text-sm">Configuración especializada para Paper, Purpur, Forge y Fabric</p>
+                            <h3 class="text-white font-medium text-lg">Escudo Cuántico Anti-DDoS</h3>
+                            <p class="text-gray-400 text-sm">Protección avanzada con capacidad de mitigación de hasta 2.5 Tbps, detección automática de ataques</p>
                         </div>
                     </div>
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🛡️</div>
+                    <div class="flex gap-4 group cursor-pointer">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">🎮</div>
                         <div>
-                            <h3 class="text-white font-medium">Seguridad enterprise</h3>
-                            <p class="text-gray-400 text-sm">Protección DDoS avanzada, backups automáticos, firewall personalizable</p>
+                            <h3 class="text-white font-medium text-lg">Optimización Minecraft Avanzada</h3>
+                            <p class="text-gray-400 text-sm">Configuración especializada para Paper, Purpur, Forge, Fabric y modpacks populares</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="glass-card rounded-2xl p-8">
-                <h3 class="text-white text-xl font-light mb-4">Testimonio de cliente</h3>
-                <div class="flex gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
-                        <span class="text-white text-xl">🎮</span>
+            <div class="space-y-6 animate-fadeInRight">
+                <div class="glass-premium rounded-2xl p-8 hover:border-purple-500 transition-all">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-2xl">🎮</div>
+                        <div>
+                            <h3 class="text-white font-bold text-xl">CraftLand Network</h3>
+                            <p class="text-gray-400 text-sm">+2,500 jugadores diarios</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-white font-medium">CraftLand Network</p>
-                        <p class="text-gray-400 text-sm">+500 jugadores diarios</p>
+                    <p class="text-gray-300 leading-relaxed italic text-lg">
+                        "Desde que migramos a InfiniHon, nuestra comunidad creció un 300%. Latencia mínima, estabilidad excepcional y soporte técnico inigualable. La mejor inversión para nuestro servidor."
+                    </p>
+                    <div class="mt-6 flex items-center gap-2">
+                        <div class="flex text-yellow-400 text-lg">★★★★★</div>
+                        <span class="text-gray-400 text-sm">(5.0) · 1,247 reseñas</span>
                     </div>
                 </div>
-                <p class="text-gray-300 text-sm leading-relaxed italic">
-                    "Desde que migramos a InfiniHon, la experiencia de nuestros jugadores mejoró drásticamente. Latencia mínima, servidores estables y un soporte técnico excepcional. ¡100% recomendados!"
-                </p>
-                <div class="mt-4 flex gap-1">
-                    <span class="text-yellow-400">★★★★★</span>
-                    <span class="text-gray-400 text-sm">(5.0)</span>
+                <div class="flex justify-between gap-4 mt-4">
+                    <div class="text-center flex-1">
+                        <div class="text-3xl text-blue-400">🏆</div>
+                        <div class="text-white font-bold text-xl">99.999%</div>
+                        <div class="text-gray-500 text-xs">Uptime Garantizado</div>
+                    </div>
+                    <div class="text-center flex-1">
+                        <div class="text-3xl text-blue-400">⚡</div>
+                        <div class="text-white font-bold text-xl">0ms</div>
+                        <div class="text-gray-500 text-xs">Latencia Promedio</div>
+                    </div>
+                    <div class="text-center flex-1">
+                        <div class="text-3xl text-blue-400">🎮</div>
+                        <div class="text-white font-bold text-xl">10K+</div>
+                        <div class="text-gray-500 text-xs">Servidores Activos</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Demo Gratis -->
+<!-- Demo Gratis con efecto futurista -->
 <section id="demo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="glass-panel rounded-3xl p-12 text-center">
-        <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 mb-6">
-            <span class="text-green-400 text-sm">🎮 OFERTA LIMITADA</span>
+    <div class="glass-premium rounded-3xl p-12 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+        <div class="relative z-10">
+            <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-5 py-2 mb-6">
+                <span class="text-green-400 text-sm animate-pulse">●</span>
+                <span class="text-green-400 text-sm font-mono">OFERTA LIMITADA • 50 PLAZAS DISPONIBLES</span>
+            </div>
+            <h2 class="text-5xl font-light text-white mb-4">Prueba 7 días <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 font-bold">Gratis</span></h2>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
+                Sin compromiso, sin tarjeta de crédito. Experimenta la potencia cuántica de nuestros servidores.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center max-w-3xl mx-auto">
+                <input type="email" placeholder="tu@email.com" class="flex-1 min-w-[200px] bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                <input type="text" placeholder="Nombre de tu servidor" class="flex-1 min-w-[200px] bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                <button class="btn-futurista px-10 py-4 rounded-xl text-white font-medium">
+                    Activar Demo
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-6">* Incluye servidor de prueba con 6GB RAM, 100GB NVMe, protección DDoS avanzada por 7 días</p>
         </div>
-        <h2 class="text-4xl font-light text-white mb-4">Prueba 7 días gratis</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto mb-8">
-            Sin compromiso, sin tarjeta de crédito. Prueba nuestro servicio y experimenta la potencia industrial.
-        </p>
-        <form class="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto">
-            <input type="email" placeholder="Tu email corporativo" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
-            <input type="text" placeholder="Nombre de tu servidor" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
-            <button class="btn-primary px-8 py-3 rounded-xl text-white font-medium">
-                Solicitar Demo
-            </button>
-        </form>
-        <p class="text-xs text-gray-500 mt-4">* Incluye servidor de prueba con 4GB RAM por 7 días</p>
     </div>
 </section>
 
-<!-- Datacenters -->
+<!-- Datacenters con animación -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <div class="text-center mb-12">
-        <h2 class="text-3xl font-light text-white mb-4">Ubicaciones Globales</h2>
-        <p class="text-gray-400">Elige la región más cercana a tus jugadores</p>
+        <h2 class="text-4xl font-light text-white mb-4 animate-fadeInUp">Red Global de <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Baja Latencia</span></h2>
+        <p class="text-gray-400 text-lg animate-fadeInUp delay-100">Elige la región más cercana a tus jugadores para una experiencia óptima</p>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="glass-card rounded-xl p-4 text-center">
-            <span class="text-2xl mb-2 block">🇺🇸</span>
-            <span class="text-white text-sm">Norteamérica</span>
-            <span class="text-gray-500 text-xs block">Virginia, California</span>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div class="glass-premium rounded-xl p-5 text-center hover:scale-105 transition-all cursor-pointer animate-fadeInUp delay-100">
+            <span class="text-4xl mb-3 block">🇺🇸</span>
+            <span class="text-white font-medium">Norteamérica</span>
+            <span class="text-gray-500 text-xs block mt-1">Virginia, California, Texas</span>
+            <span class="text-blue-400 text-xs block mt-2">Latencia: 10-30ms</span>
         </div>
-        <div class="glass-card rounded-xl p-4 text-center">
-            <span class="text-2xl mb-2 block">🇪🇺</span>
-            <span class="text-white text-sm">Europa</span>
-            <span class="text-gray-500 text-xs block">Francfort, Londres</span>
+        <div class="glass-premium rounded-xl p-5 text-center hover:scale-105 transition-all cursor-pointer animate-fadeInUp delay-200">
+            <span class="text-4xl mb-3 block">🇪🇺</span>
+            <span class="text-white font-medium">Europa</span>
+            <span class="text-gray-500 text-xs block mt-1">Francfort, Londres, París</span>
+            <span class="text-blue-400 text-xs block mt-2">Latencia: 15-35ms</span>
         </div>
-        <div class="glass-card rounded-xl p-4 text-center">
-            <span class="text-2xl mb-2 block">🇸🇬</span>
-            <span class="text-white text-sm">Asia-Pacífico</span>
-            <span class="text-gray-500 text-xs block">Singapur, Tokio</span>
+        <div class="glass-premium rounded-xl p-5 text-center hover:scale-105 transition-all cursor-pointer animate-fadeInUp delay-300">
+            <span class="text-4xl mb-3 block">🇸🇬</span>
+            <span class="text-white font-medium">Asia-Pacífico</span>
+            <span class="text-gray-500 text-xs block mt-1">Singapur, Tokio, Seúl</span>
+            <span class="text-blue-400 text-xs block mt-2">Latencia: 20-40ms</span>
         </div>
-        <div class="glass-card rounded-xl p-4 text-center">
-            <span class="text-2xl mb-2 block">🇧🇷</span>
-            <span class="text-white text-sm">Latinoamérica</span>
-            <span class="text-gray-500 text-xs block">São Paulo, Santiago</span>
+        <div class="glass-premium rounded-xl p-5 text-center hover:scale-105 transition-all cursor-pointer animate-fadeInUp delay-400">
+            <span class="text-4xl mb-3 block">🇧🇷</span>
+            <span class="text-white font-medium">Latinoamérica</span>
+            <span class="text-gray-500 text-xs block mt-1">São Paulo, Santiago, México</span>
+            <span class="text-blue-400 text-xs block mt-2">Latencia: 15-35ms</span>
         </div>
     </div>
 </section>
 
-<!-- Preguntas Frecuentes -->
+<!-- Preguntas Frecuentes con acordeón animado -->
 <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <div class="text-center mb-12">
-        <h2 class="text-3xl font-light text-white mb-4">Preguntas Frecuentes</h2>
+        <h2 class="text-4xl font-light text-white mb-4 animate-fadeInUp">Preguntas <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Frecuentes</span></h2>
+        <p class="text-gray-400 text-lg animate-fadeInUp delay-100">Todo lo que necesitas saber sobre nuestros servicios</p>
     </div>
     <div class="space-y-4">
-        <div class="glass-card rounded-xl p-6">
-            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
-                <span class="text-white font-medium">¿Puedo migrar mi servidor actual?</span>
-                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="glass-premium rounded-xl overflow-hidden animate-fadeInUp delay-100">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full p-6 hover:bg-white/5 transition-all">
+                <span class="text-white font-medium text-lg">¿Puedo migrar mi servidor actual sin tiempo de inactividad?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
-            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
-                Sí, ofrecemos migración gratuita y asistida. Nuestros técnicos te ayudarán a transferir todos tus archivos y configuraciones sin tiempo de inactividad.
+            <div class="faq-answer px-6 pb-6 hidden">
+                <p class="text-gray-400 leading-relaxed">Sí, ofrecemos migración gratuita y asistida con cero downtime. Nuestros técnicos especializados se encargan de transferir todos tus archivos, configuraciones y plugins sin interrumpir la experiencia de tus jugadores.</p>
             </div>
         </div>
-        <div class="glass-card rounded-xl p-6">
-            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
-                <span class="text-white font-medium">¿Qué versiones de Minecraft soportan?</span>
-                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="glass-premium rounded-xl overflow-hidden animate-fadeInUp delay-200">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full p-6 hover:bg-white/5 transition-all">
+                <span class="text-white font-medium text-lg">¿Qué versiones y modpacks soportan?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
-            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
-                Soportamos todas las versiones de 1.8 a 1.20.4, incluyendo modpacks populares como RLCraft, Better Minecraft, y servidores personalizados con Paper, Purpur, Forge y Fabric.
+            <div class="faq-answer px-6 pb-6 hidden">
+                <p class="text-gray-400 leading-relaxed">Soportamos todas las versiones de Minecraft desde la 1.8 hasta la 1.20.4, incluyendo modpacks populares como RLCraft, Better Minecraft, All The Mods, y servidores personalizados con Paper, Purpur, Forge, Fabric y Spigot.</p>
             </div>
         </div>
-        <div class="glass-card rounded-xl p-6">
-            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
-                <span class="text-white font-medium">¿Qué tipo de soporte ofrecen?</span>
-                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="glass-premium rounded-xl overflow-hidden animate-fadeInUp delay-300">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full p-6 hover:bg-white/5 transition-all">
+                <span class="text-white font-medium text-lg">¿Qué tipo de soporte técnico ofrecen?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
-            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
-                Soporte 24/7 vía chat, ticket y WhatsApp. Respuesta garantizada en menos de 15 minutos para clientes empresariales y 30 minutos para planes profesionales.
+            <div class="faq-answer px-6 pb-6 hidden">
+                <p class="text-gray-400 leading-relaxed">Soporte 24/7 vía chat en vivo, Discord, WhatsApp y sistema de tickets. Respuesta garantizada en menos de 5 minutos para clientes empresariales y 15 minutos para planes profesionales. Además, contamos con asesores técnicos especializados en Minecraft.</p>
+            </div>
+        </div>
+        <div class="glass-premium rounded-xl overflow-hidden animate-fadeInUp delay-400">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full p-6 hover:bg-white/5 transition-all">
+                <span class="text-white font-medium text-lg">¿Ofrecen garantía de reembolso?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer px-6 pb-6 hidden">
+                <p class="text-gray-400 leading-relaxed">Sí, ofrecemos garantía de satisfacción de 30 días. Si no estás completamente satisfecho con nuestro servicio, te devolvemos el 100% de tu inversión sin preguntas.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-20">
+<!-- Footer Premium -->
+<footer class="border-t border-white/5 bg-[#020617]/90 backdrop-blur-sm mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid md:grid-cols-4 gap-8">
             <div>
@@ -503,47 +651,110 @@
                     </div>
                     <span class="text-white font-bold text-xl">InfiniHon</span>
                 </div>
-                <p class="text-gray-400 text-sm">Servidores Minecraft de grado industrial para comunidades exigentes.</p>
+                <p class="text-gray-400 text-sm leading-relaxed">Servidores Minecraft de grado industrial para comunidades exigentes. Potencia cuántica, latencia cero y soporte 24/7.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-3 10h-5v2h5v-2m0-4h-5v2h5V9Z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 4.8 3.4 8.8 8 9.8v-7h-2v-2h2V9c0-2.2 1.8-4 4-4h2v2h-2c-1.1 0-2 .9-2 2v2h4v2h-4v7c4.6-1 8-5 8-9.8z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                </div>
             </div>
             <div>
-                <h4 class="text-white font-semibold mb-4">Enlaces</h4>
+                <h4 class="text-white font-semibold mb-4">Enlaces Rápidos</h4>
                 <ul class="space-y-2">
-                    <li><a href="#planes" class="text-gray-400 hover:text-white text-sm transition-colors">Planes</a></li>
-                    <li><a href="#demo" class="text-gray-400 hover:text-white text-sm transition-colors">Demo Gratis</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Documentación</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Estado del servicio</a></li>
+                    <li><a href="#planes" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Planes</a></li>
+                    <li><a href="#demo" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Demo Gratis</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Documentación API</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Estado del Servicio</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-white font-semibold mb-4">Contacto</h4>
                 <ul class="space-y-2">
-                    <li class="text-gray-400 text-sm">mc@infinihon.com</li>
-                    <li class="text-gray-400 text-sm">+34 93 123 45 67</li>
-                    <li class="text-gray-400 text-sm">Discord: /infinihon</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> mc@infinihon.com</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> +34 93 123 45 67</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg> Discord: /infinihon</li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-semibold mb-4">Comunidad</h4>
-                <div class="flex gap-4">
-                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-3 10h-5v2h5v-2m0-4h-5v2h5V9Z"/></svg></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 4.8 3.4 8.8 8 9.8v-7h-2v-2h2V9c0-2.2 1.8-4 4-4h2v2h-2c-1.1 0-2 .9-2 2v2h4v2h-4v7c4.6-1 8-5 8-9.8z"/></svg></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
-                </div>
+                <h4 class="text-white font-semibold mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all">Términos de Servicio</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all">Política de Privacidad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all">SLA Garantizado</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all">Licencias</a></li>
+                </ul>
             </div>
         </div>
-        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
-            © 2024 InfiniHon Minecraft Hosting. Todos los derechos reservados.
+        <div class="mt-8 pt-8 border-t border-white/10 text-center">
+            <p class="text-gray-400 text-sm">© 2024 InfiniHon Minecraft Hosting. Todos los derechos reservados. Potenciado por infraestructura cuántica.</p>
         </div>
     </div>
 </footer>
 
 <script>
+    // Toggle FAQ
     function toggleFaq(button) {
         const answer = button.nextElementSibling;
         const icon = button.querySelector('svg');
         answer.classList.toggle('hidden');
         icon.classList.toggle('rotate-180');
     }
+
+    // Partículas 3D animadas
+    const canvas = document.getElementById('particles-3d');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.speedY = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.3;
+        }
+        
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+        }
+        
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+    
+    const particles = [];
+    for (let i = 0; i < 150; i++) {
+        particles.push(new Particle());
+    }
+    
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    
+    animateParticles();
 </script>
 </body>
 </html>
