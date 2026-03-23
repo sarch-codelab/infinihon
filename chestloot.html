@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - EssentialsX | Plugin Premium para Minecraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #05070c;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                repeating-linear-gradient(45deg, rgba(59, 130, 246, 0.02) 0px, rgba(59, 130, 246, 0.02) 2px, transparent 2px, transparent 8px);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes borderFlow {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.3); }
+            50% { border-color: rgba(139, 92, 246, 0.6); }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Glassmorphism Premium */
+        .glass-premium {
+            background: rgba(10, 15, 31, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-premium:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        /* Galería Premium */
+        .gallery-main {
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0f1f, #020617);
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+        
+        .gallery-main::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(59, 130, 246, 0.1));
+            pointer-events: none;
+        }
+        
+        .gallery-main img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gallery-main:hover img {
+            transform: scale(1.08);
+        }
+        
+        .gallery-thumb {
+            width: 90px;
+            height: 90px;
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0.5;
+            border: 2px solid transparent;
+        }
+        
+        .gallery-thumb:hover, .gallery-thumb.active {
+            opacity: 1;
+            transform: translateY(-6px) scale(1.08);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Tabs Premium */
+        .tab-button {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #22d3ee);
+            transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 2px;
+        }
+        
+        .tab-button:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            color: #3b82f6;
+        }
+        
+        .tab-button.active::after {
+            width: 70%;
+        }
+        
+        /* Contenedor de tabs */
+        .tab-content-container {
+            position: relative;
+            min-height: 580px;
+        }
+        
+        .tab-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        
+        .tab-content.active {
+            position: relative;
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        
+        /* Comandos y permisos Premium */
+        .command-item {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+            border-left: 3px solid #3b82f6;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 0.75rem 0.75rem 0;
+            cursor: pointer;
+        }
+        
+        .command-item:hover {
+            transform: translateX(15px);
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+            border-left-color: #8b5cf6;
+            box-shadow: -8px 0 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .command-item code {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* Badges Premium */
+        .badge-version {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #a78bfa;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+        
+        .badge-category {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* Botones Premium */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #8b5cf6);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Version item Premium */
+        .version-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 3px solid transparent;
+        }
+        
+        .version-item:hover {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.02));
+            transform: translateX(8px);
+            border-left-color: #3b82f6;
+        }
+        
+        /* Scrollbar Premium */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 15, 31, 0.8);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #60a5fa, #a855f7);
+        }
+        
+        /* Pre styles */
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.6;
+        }
+        
+        /* Review card */
+        .review-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        
+        .review-card:hover {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.02));
+            border-color: rgba(59, 130, 246, 0.2);
+            transform: translateX(5px);
+        }
+        
+        /* Stats */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Premium -->
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/90 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center float-animation">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <div>
+                    <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
+                    <span class="ml-2 text-xs bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">PLUGINS PREMIUM</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Inicio</a>
+                    <a href="servicios-minecraft.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Servidores</a>
+                    <a href="plugins.html" class="text-white transition-all text-sm font-medium border-b-2 border-blue-400 pb-1">Plugins</a>
+                    <a href="soporte.html" class="text-gray-300 hover:text-blue-400 transition-all hover:translate-y-[-2px] text-sm font-medium">Soporte</a>
+                </div>
+                <a href="contacto.html" class="btn-primary text-white px-5 py-2 rounded-xl text-sm font-medium transition-all">
+                    Contactar
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-sm text-gray-400 mb-6 animate-fadeInUp">
+        <a href="plugins.html" class="hover:text-blue-400 transition">Plugins</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <span class="text-blue-400 font-medium">EssentialsX</span>
+    </div>
+    
+    <div class="grid lg:grid-cols-3 gap-8">
+        
+        <!-- Columna izquierda -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Galería Premium -->
+            <div class="glass-premium rounded-2xl p-6 animate-fadeInUp" style="animation-delay: 0.1s">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-white text-xl font-light flex items-center gap-2">
+                        <span class="w-1 h-5 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></span>
+                        Galería
+                    </h2>
+                    <span class="badge-version text-xs">🖼️ 5 imágenes</span>
+                </div>
+                <div class="gallery-main mb-5">
+                    <img id="mainImage" src="https://placehold.co/800x450/1e3a8a/60a5fa?text=EssentialsX+Dashboard" alt="EssentialsX" class="w-full h-full object-cover">
+                </div>
+                <div class="flex gap-3 overflow-x-auto pb-2 justify-center">
+                    <div class="gallery-thumb active" onclick="changeImage(0)"><img src="https://placehold.co/90x90/1e3a8a/60a5fa?text=DB" class="w-full h-full object-cover"></div>
+                    <div class="gallery-thumb" onclick="changeImage(1)"><img src="https://placehold.co/90x90/2563eb/ffffff?text=CMD" class="w-full h-full object-cover"></div>
+                    <div class="gallery-thumb" onclick="changeImage(2)"><img src="https://placehold.co/90x90/3b82f6/ffffff?text=ECO" class="w-full h-full object-cover"></div>
+                    <div class="gallery-thumb" onclick="changeImage(3)"><img src="https://placehold.co/90x90/60a5fa/ffffff?text=WARP" class="w-full h-full object-cover"></div>
+                    <div class="gallery-thumb" onclick="changeImage(4)"><img src="https://placehold.co/90x90/22d3ee/ffffff?text=HOME" class="w-full h-full object-cover"></div>
+                </div>
+            </div>
+            
+            <!-- Tabs Premium -->
+            <div class="glass-premium rounded-2xl overflow-hidden animate-fadeInUp" style="animation-delay: 0.2s">
+                <div class="border-b border-white/10 flex gap-1 px-6 overflow-x-auto bg-white/5">
+                    <button class="tab-button active" data-tab="description">📝 Descripción</button>
+                    <button class="tab-button" data-tab="commands">⌨️ Comandos</button>
+                    <button class="tab-button" data-tab="config">⚙️ Configuración</button>
+                    <button class="tab-button" data-tab="permissions">🔑 Permisos</button>
+                    <button class="tab-button" data-tab="changelog">📅 Cambios</button>
+                </div>
+                
+                <div class="tab-content-container p-6">
+                    <!-- Descripción -->
+                    <div id="description-content" class="tab-content active">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-white text-xl font-medium mb-3">EssentialsX - El plugin esencial para tu servidor</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                EssentialsX es el plugin más completo y utilizado para servidores Minecraft. Proporciona una suite completa de comandos esenciales que todo servidor necesita, desde teletransportes hasta gestión de economía.
+                            </p>
+                            
+                            <h4 class="text-white font-medium mt-6 mb-3 flex items-center gap-2">
+                                <span class="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></span>
+                                🎯 Características principales
+                            </h4>
+                            <div class="grid md:grid-cols-2 gap-2">
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Sistema de homes, warps y teletransportes</span></div>
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Economía integrada con Vault</span></div>
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Sistema de kits con recompensas</span></div>
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Mensajes de bienvenida y despedida</span></div>
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Sistema de cofres de mortero</span></div>
+                                <div class="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-all"><span class="text-green-400 text-xl">✓</span><span class="text-gray-300 text-sm">Back después de muerte o teletransporte</span></div>
+                            </div>
+                            
+                            <div class="mt-6 p-5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-3xl">💡</span>
+                                    <div>
+                                        <p class="text-white text-sm font-semibold">¿Sabías qué?</p>
+                                        <p class="text-gray-400 text-sm">EssentialsX es el plugin más descargado de la historia de Minecraft, con más de 1.5 millones de descargas activas y soporte para versiones desde la 1.8 hasta la 1.20.4.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Comandos -->
+                    <div id="commands-content" class="tab-content">
+                        <h3 class="text-white text-lg font-medium mb-5 flex items-center gap-2">
+                            <i class="fas fa-terminal text-blue-400"></i>
+                            Comandos disponibles
+                        </h3>
+                        <div class="space-y-2 max-h-[500px] overflow-y-auto pr-2">
+                            <div class="command-item"><code>/spawn</code><p class="text-gray-400 text-xs mt-1">Teletransporta al punto de spawn del servidor</p></div>
+                            <div class="command-item"><code>/home [nombre]</code><p class="text-gray-400 text-xs mt-1">Teletransporta a tu casa</p></div>
+                            <div class="command-item"><code>/sethome [nombre]</code><p class="text-gray-400 text-xs mt-1">Establece un punto de casa</p></div>
+                            <div class="command-item"><code>/warp [nombre]</code><p class="text-gray-400 text-xs mt-1">Teletransporta a un warp público</p></div>
+                            <div class="command-item"><code>/tpa [jugador]</code><p class="text-gray-400 text-xs mt-1">Solicita teletransportarte a otro jugador</p></div>
+                            <div class="command-item"><code>/tpaccept</code><p class="text-gray-400 text-xs mt-1">Acepta una solicitud de teletransporte</p></div>
+                            <div class="command-item"><code>/back</code><p class="text-gray-400 text-xs mt-1">Regresa al último punto de teletransporte o muerte</p></div>
+                            <div class="command-item"><code>/kit [nombre]</code><p class="text-gray-400 text-xs mt-1">Recibe un kit</p></div>
+                            <div class="command-item"><code>/msg [jugador] [mensaje]</code><p class="text-gray-400 text-xs mt-1">Envía un mensaje privado</p></div>
+                            <div class="command-item"><code>/balance</code><p class="text-gray-400 text-xs mt-1">Muestra tu balance de dinero</p></div>
+                            <div class="command-item"><code>/pay [jugador] [cantidad]</code><p class="text-gray-400 text-xs mt-1">Transfiere dinero</p></div>
+                            <div class="command-item"><code>/tpahere [jugador]</code><p class="text-gray-400 text-xs mt-1">Solicita que otro jugador se teletransporte a ti</p></div>
+                            <div class="command-item"><code>/tpdeny</code><p class="text-gray-400 text-xs mt-1">Rechaza una solicitud de teletransporte</p></div>
+                            <div class="command-item"><code>/hat</code><p class="text-gray-400 text-xs mt-1">Pone el objeto que tienes en la cabeza</p></div>
+                            <div class="command-item"><code>/afk</code><p class="text-gray-400 text-xs mt-1">Marca como AFK (Ausente)</p></div>
+                            <div class="command-item"><code>/seen [jugador]</code><p class="text-gray-400 text-xs mt-1">Muestra la última vez que un jugador estuvo conectado</p></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Configuración -->
+                    <div id="config-content" class="tab-content">
+                        <h3 class="text-white text-lg font-medium mb-4">Archivo de configuración (config.yml)</h3>
+                        <div class="glass-card rounded-xl p-5 overflow-x-auto max-h-[500px] overflow-y-auto">
+                            <pre class="text-gray-300 text-xs font-mono whitespace-pre-wrap leading-relaxed">
+# ===========================================
+# ESSENTIALSX CONFIGURATION
+# Versión: 2.20.1
+# ===========================================
+
+# IDIOMA Y LOCALIZACIÓN
+locale: es
+
+# TELETRANSPORTE
+teleport:
+  cooldown: 5
+  delay: 3
+  show-progress-bar: true
+  cancel-on-move: true
+  cancel-on-damage: true
+
+# ECONOMÍA
+economy:
+  starting-balance: 100.0
+  max-balance: 1000000.0
+  currency-symbol: "$"
+  currency-format: "{symbol}{amount}"
+  currency-decimals: 2
+
+# KITS
+kits:
+  starter:
+    delay: 86400
+    items:
+      - "stone_sword"
+      - "bread 16"
+      - "wooden_pickaxe"
+      - "iron_helmet"
+      - "iron_boots"
+  vip:
+    delay: 43200
+    items:
+      - "diamond_sword"
+      - "golden_apple 3"
+      - "ender_pearl 8"
+
+# HOMES
+max-homes:
+  default: 5
+  vip: 10
+  admin: 50
+
+# MENSAJES
+welcome:
+  enabled: true
+  message: "&aBienvenido &e{player} &aal servidor de InfiniHon!"
+  sound: "ENTITY_PLAYER_LEVELUP"
+
+quit:
+  enabled: true
+  message: "&c{player} &7ha abandonado el servidor"
+
+# PROTECCIÓN
+protect:
+  prevent-spawn: false
+  prevent-teleport: false
+
+# MISCELÁNEO
+misc:
+  death-chest: true
+  keep-inventory: false
+  keep-exp: false
+  afk:
+    enabled: true
+    kick-if-afk: false
+    afk-timeout: 300
+</pre>
+                        </div>
+                        <div class="mt-4 flex gap-3">
+                            <button class="btn-secondary px-5 py-2.5 rounded-xl text-sm">📥 Descargar config</button>
+                            <button class="btn-secondary px-5 py-2.5 rounded-xl text-sm">📚 Documentación completa</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Permisos -->
+                    <div id="permissions-content" class="tab-content">
+                        <h3 class="text-white text-lg font-medium mb-5 flex items-center gap-2">
+                            <i class="fas fa-key text-blue-400"></i>
+                            Nodos de permiso
+                        </h3>
+                        
+                        <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2">
+                            <div>
+                                <h4 class="text-blue-400 font-medium mb-3 flex items-center gap-2"><i class="fas fa-user"></i> Comandos básicos</h4>
+                                <div class="space-y-2">
+                                    <div class="command-item"><code class="text-purple-400">essentials.spawn</code><p class="text-gray-400 text-xs mt-1">Permite usar /spawn</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.home</code><p class="text-gray-400 text-xs mt-1">Permite usar /home</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.sethome</code><p class="text-gray-400 text-xs mt-1">Permite usar /sethome</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.warp</code><p class="text-gray-400 text-xs mt-1">Permite usar /warp</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.kit</code><p class="text-gray-400 text-xs mt-1">Permite usar /kit</p></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-blue-400 font-medium mb-3 flex items-center gap-2"><i class="fas fa-crown"></i> Administración</h4>
+                                <div class="space-y-2">
+                                    <div class="command-item"><code class="text-purple-400">essentials.gamemode</code><p class="text-gray-400 text-xs mt-1">Cambiar modo de juego</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.god</code><p class="text-gray-400 text-xs mt-1">Modo Dios</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.fly</code><p class="text-gray-400 text-xs mt-1">Permite volar</p></div>
+                                    <div class="command-item"><code class="text-purple-400">essentials.*</code><p class="text-gray-400 text-xs mt-1">Acceso a TODOS los comandos (solo administradores)</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Changelog -->
+                    <div id="changelog-content" class="tab-content">
+                        <h3 class="text-white text-lg font-medium mb-5 flex items-center gap-2">
+                            <i class="fas fa-history text-blue-400"></i>
+                            Historial de versiones
+                        </h3>
+                        <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                            <div class="version-item flex flex-col p-4 border-b border-white/5 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-white font-bold text-lg">v2.20.1</span>
+                                    <span class="badge-version">15 marzo 2024</span>
+                                </div>
+                                <ul class="space-y-1 text-gray-400 text-sm ml-4 list-disc">
+                                    <li>✨ Soporte completo para Minecraft 1.20.4</li>
+                                    <li>🐛 Corrección de bugs en el sistema de teletransporte</li>
+                                    <li>⚡ Optimización de rendimiento en el sistema de economía</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="version-item flex flex-col p-4 border-b border-white/5 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-white font-bold text-lg">v2.20.0</span>
+                                    <span class="badge-version">1 febrero 2024</span>
+                                </div>
+                                <ul class="space-y-1 text-gray-400 text-sm ml-4 list-disc">
+                                    <li>✨ Nuevo comando: /tpahere</li>
+                                    <li>✨ Sistema de economía mejorado</li>
+                                    <li>⚡ Optimización del sistema de homes (40% más rápido)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="version-item flex flex-col p-4 border-b border-white/5 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-white font-bold text-lg">v2.19.7</span>
+                                    <span class="badge-version">10 diciembre 2023</span>
+                                </div>
+                                <ul class="space-y-1 text-gray-400 text-sm ml-4 list-disc">
+                                    <li>🔒 Corrección de seguridad crítica</li>
+                                    <li>🐛 Fix: Problema con /back después de morir</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                            <div class="flex items-start gap-3">
+                                <span class="text-2xl">📢</span>
+                                <div>
+                                    <p class="text-white text-sm font-semibold">Próxima versión (v2.21.0)</p>
+                                    <p class="text-gray-400 text-sm">En desarrollo: Soporte para Minecraft 1.20.5, nuevo sistema de votación e integración con Discord.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha -->
+        <div class="space-y-6">
+            <!-- Header del plugin -->
+            <div class="glass-premium rounded-2xl p-6 animate-fadeInUp" style="animation-delay: 0.3s">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-3xl float-animation">⚙️</div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">EssentialsX</h1>
+                        <p class="text-gray-400 text-sm">por EssentialsTeam</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-3">
+                    <span class="badge-category">⚙️ Administración</span>
+                    <span class="badge-version">📦 1.8 - 1.20.4</span>
+                    <span class="badge-version">⬇️ 1.5M+ descargas</span>
+                </div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="flex text-yellow-400 text-lg">★★★★★</div>
+                    <span class="text-gray-400 text-sm">(4.9/5 · 12,847 reseñas)</span>
+                </div>
+                <div class="flex gap-3 mb-5">
+                    <button class="btn-primary flex-1 py-3 rounded-xl text-white font-medium flex items-center justify-center gap-2">📥 Descargar plugin</button>
+                    <button class="btn-secondary px-4 py-3 rounded-xl group">
+                        <i class="fas fa-info-circle group-hover:scale-110 transition-transform"></i>
+                    </button>
+                </div>
+                <div class="border-t border-white/10 pt-4">
+                    <div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Última actualización:</span><span class="text-white">15 marzo 2024</span></div>
+                    <div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Tamaño:</span><span class="text-white">2.3 MB</span></div>
+                    <div class="flex justify-between text-sm"><span class="text-gray-400">Licencia:</span><span class="text-green-400">MIT Open Source</span></div>
+                </div>
+            </div>
+            
+            <!-- Estadísticas rápidas -->
+            <div class="glass-premium rounded-2xl p-6 animate-fadeInUp" style="animation-delay: 0.4s">
+                <h3 class="text-white font-medium mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-blue-400"></i>
+                    Estadísticas
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="stat-card text-center p-3 rounded-xl bg-white/5">
+                        <div class="text-2xl text-blue-400">⭐ 4.9</div>
+                        <div class="text-gray-400 text-xs">Valoración media</div>
+                    </div>
+                    <div class="stat-card text-center p-3 rounded-xl bg-white/5">
+                        <div class="text-2xl text-blue-400">📦 1.5M+</div>
+                        <div class="text-gray-400 text-xs">Descargas totales</div>
+                    </div>
+                    <div class="stat-card text-center p-3 rounded-xl bg-white/5">
+                        <div class="text-2xl text-blue-400">🎮 500K+</div>
+                        <div class="text-gray-400 text-xs">Servidores activos</div>
+                    </div>
+                    <div class="stat-card text-center p-3 rounded-xl bg-white/5">
+                        <div class="text-2xl text-blue-400">📝 12.8K</div>
+                        <div class="text-gray-400 text-xs">Reseñas</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dependencias -->
+            <div class="glass-premium rounded-2xl p-6 animate-fadeInUp" style="animation-delay: 0.5s">
+                <h3 class="text-white font-medium mb-4 flex items-center gap-2">
+                    <i class="fas fa-cubes text-blue-400"></i>
+                    Dependencias
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-all group">
+                        <span class="text-green-400 text-xl group-hover:scale-125 transition-transform">✓</span>
+                        <div>
+                            <span class="text-white font-medium">Vault</span>
+                            <p class="text-gray-400 text-xs">Requerido para economía y permisos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-all group">
+                        <span class="text-green-400 text-xl group-hover:scale-125 transition-transform">✓</span>
+                        <div>
+                            <span class="text-white font-medium">LuckPerms</span>
+                            <p class="text-gray-400 text-xs">Recomendado para gestión de permisos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-all group">
+                        <span class="text-yellow-400 text-xl group-hover:scale-125 transition-transform">ⓘ</span>
+                        <div>
+                            <span class="text-white font-medium">PlaceholderAPI</span>
+                            <p class="text-gray-400 text-xs">Opcional - Para placeholders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Soporte rápido -->
+            <div class="glass-premium rounded-2xl p-6 animate-fadeInUp" style="animation-delay: 0.6s">
+                <h3 class="text-white font-medium mb-3 flex items-center gap-2">
+                    <i class="fas fa-headset text-blue-400"></i>
+                    ¿Necesitas ayuda?
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">Accede a nuestra documentación completa o contacta con soporte técnico 24/7.</p>
+                <div class="flex gap-2">
+                    <a href="#" class="flex-1 btn-secondary py-2 rounded-xl text-sm text-center hover:scale-105 transition-transform">📚 Documentación</a>
+                    <a href="#" class="flex-1 btn-primary py-2 rounded-xl text-sm text-center">💬 Soporte</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sección de reseñas -->
+    <div class="glass-premium rounded-2xl p-8 mt-8 animate-fadeInUp" style="animation-delay: 0.7s">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-white text-xl font-light flex items-center gap-2">
+                <span class="w-1 h-5 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></span>
+                📝 Reseñas de la comunidad
+            </h2>
+            <span class="badge-version">12,847 reseñas</span>
+        </div>
+        
+        <div class="flex items-center gap-8 mb-8">
+            <div class="text-center">
+                <div class="text-6xl font-bold text-white">4.9</div>
+                <div class="flex gap-1 mt-2 text-yellow-400 text-xl">★★★★★</div>
+                <div class="text-gray-400 text-sm mt-1">Excelente calificación</div>
+            </div>
+            <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2 group">
+                    <span class="text-gray-400 w-12 text-sm">5★</span>
+                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[85%] h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full group-hover:scale-x-110 transition-transform origin-left"></div>
+                    </div>
+                    <span class="text-gray-400 text-xs w-10">85%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400 w-12 text-sm">4★</span>
+                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[10%] h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"></div>
+                    </div>
+                    <span class="text-gray-400 text-xs w-10">10%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400 w-12 text-sm">3★</span>
+                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[3%] h-full bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full"></div>
+                    </div>
+                    <span class="text-gray-400 text-xs w-10">3%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="review-card p-5 rounded-xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold">JC</div>
+                    <div>
+                        <p class="text-white font-semibold">Juan Carlos</p>
+                        <div class="flex gap-1 text-yellow-400 text-sm">★★★★★</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed">"El mejor plugin para servidores, indispensable. Lo uso desde hace 3 años y nunca me ha fallado. El soporte técnico es excelente."</p>
+                <p class="text-gray-500 text-xs mt-3">Hace 2 días · Administrador de servidor</p>
+            </div>
+            <div class="review-card p-5 rounded-xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">MG</div>
+                    <div>
+                        <p class="text-white font-semibold">María García</p>
+                        <div class="flex gap-1 text-yellow-400 text-sm">★★★★★</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed">"EssentialsX es la base de cualquier servidor. Fácil de configurar, muy estable y con una comunidad increíble. ¡Lo recomiendo 100%!"</p>
+                <p class="text-gray-500 text-xs mt-3">Hace 5 días · Propietaria de servidor</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-6">
+            <button class="btn-secondary px-6 py-2 rounded-xl text-sm hover:scale-105 transition-transform">Ver todas las reseñas (12,847)</button>
+        </div>
+    </div>
+</main>
+
+<!-- Footer Premium -->
+<footer class="border-t border-white/5 bg-[#020617]/90 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">Catálogo de plugins premium para servidores Minecraft de alto rendimiento.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><i class="fab fa-github text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><i class="fab fa-discord text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-all hover:scale-110"><i class="fab fa-twitter text-xl"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Enlaces</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Documentación</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Soporte técnico</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">API</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Términos de uso</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Contacto</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><i class="fas fa-envelope w-4"></i> plugins@infinihon.com</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><i class="fab fa-discord w-4"></i> /infinihon</li>
+                    <li class="text-gray-400 text-sm flex items-center gap-2"><i class="fas fa-phone w-4"></i> +34 93 123 45 67</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Política de privacidad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Términos de servicio</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-all hover:translate-x-1 inline-block">Licencia MIT</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
+            © 2024 InfiniHon Plugin Store. Todos los derechos reservados. Potenciado por tecnología cuántica.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Galería
+    const images = [
+        "https://placehold.co/800x450/1e3a8a/60a5fa?text=EssentialsX+Dashboard",
+        "https://placehold.co/800x450/2563eb/ffffff?text=EssentialsX+Commands",
+        "https://placehold.co/800x450/3b82f6/ffffff?text=EssentialsX+Economy",
+        "https://placehold.co/800x450/60a5fa/ffffff?text=EssentialsX+Warps",
+        "https://placehold.co/800x450/22d3ee/ffffff?text=EssentialsX+Homes"
+    ];
+    let currentImageIndex = 0;
+    
+    function changeImage(index) {
+        currentImageIndex = index;
+        const mainImg = document.getElementById('mainImage');
+        mainImg.style.opacity = '0.5';
+        setTimeout(() => {
+            mainImg.src = images[index];
+            setTimeout(() => { mainImg.style.opacity = '1'; }, 150);
+        }, 150);
+        
+        document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+            if (i === index) thumb.classList.add('active');
+            else thumb.classList.remove('active');
+        });
+    }
+    
+    // Tabs
+    let currentTab = 'description';
+    let isTransitioning = false;
+    
+    function switchTab(tabId) {
+        if (isTransitioning || currentTab === tabId) return;
+        isTransitioning = true;
+        
+        const currentContent = document.getElementById(`${currentTab}-content`);
+        const newContent = document.getElementById(`${tabId}-content`);
+        
+        if (!currentContent || !newContent) {
+            isTransitioning = false;
+            return;
+        }
+        
+        currentContent.classList.remove('active');
+        newContent.classList.add('active');
+        
+        setTimeout(() => { isTransitioning = false; }, 400);
+        currentTab = tabId;
+        
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
+        });
+    }
+    
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+    
+    // Auto-rotación de imágenes
+    let autoRotate = setInterval(() => {
+        let next = (currentImageIndex + 1) % images.length;
+        changeImage(next);
+    }, 5000);
+    
+    // Detener auto-rotación al hacer hover
+    document.querySelector('.gallery-main').addEventListener('mouseenter', () => {
+        clearInterval(autoRotate);
+    });
+    
+    document.querySelector('.gallery-main').addEventListener('mouseleave', () => {
+        autoRotate = setInterval(() => {
+            let next = (currentImageIndex + 1) % images.length;
+            changeImage(next);
+        }, 5000);
+    });
+</script>
+<script src="https://kit.fontawesome.com/a5f0f6b8e7.js" crossorigin="anonymous"></script>
+</body>
+</html>
