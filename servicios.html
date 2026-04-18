@@ -3,92 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Servicios Profesionales IT</title>
+    <title>InfiniHon • Servicios Profesionales IT</title>
+    <!-- Tailwind + Fuentes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
+        * { font-family: 'Inter', sans-serif; }
+        .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
+        
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            a, button, .bento-card, [data-cursor-interact] { cursor: none !important; }
         }
-        .font-mono-custom {
-            font-family: 'JetBrains Mono', monospace;
-        }
+
         body {
             background-color: #020617;
             background-image: radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
                               radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
                               radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
+            overflow-x: hidden;
         }
-        
-        /* Animación de entrada para las tarjetas */
+
+        #custom-cursor {
+            width: 28px; height: 28px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+        #cursor-dot {
+            position: absolute; top: 50%; left: 50%;
+            width: 5px; height: 5px; background: white;
+            border-radius: 50%; transform: translate(-50%, -50%);
+            transition: background-color 0.3s;
+        }
+        #cursor-aura {
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
+            position: fixed; pointer-events: none; z-index: 9998;
+            border-radius: 50%; transform: translate(-50%, -50%);
+            transition: opacity 0.4s, background 0.3s;
+        }
+
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
         .bento-card {
             animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
-        
         .bento-card:nth-child(1) { animation-delay: 0.1s; }
         .bento-card:nth-child(2) { animation-delay: 0.2s; }
         .bento-card:nth-child(3) { animation-delay: 0.3s; }
         .bento-card:nth-child(4) { animation-delay: 0.4s; }
         .bento-card:nth-child(5) { animation-delay: 0.5s; }
         .bento-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes softPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-slow { animation: softPulse 6s ease-in-out infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+
+        /* Estilos del carrusel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        
+        .carousel-track {
+            display: flex;
+            animation: scroll 25s linear infinite;
+            width: max-content;
+        }
+        
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .tech-item {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.5rem;
+            white-space: nowrap;
+        }
+        
+        .tech-item:hover {
+            opacity: 1 !important;
+            color: #60a5fa;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            transform: scale(1.1);
+        }
     </style>
 </head>
-<body class="min-h-screen relative overflow-x-hidden">
+<body class="min-h-screen relative">
 
-<!-- Gradientes de fondo animados -->
+<!-- CURSOR PERSONALIZADO -->
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<!-- Gradientes animados -->
 <div class="fixed inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute top-20 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+    <div class="absolute top-20 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute bottom-20 right-10 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-3xl"></div>
 </div>
 
-<!-- Header/Navigation -->
+<!-- Navegación -->
 <nav class="relative z-10 border-b border-white/5 bg-[#020617]/50 backdrop-blur-sm sticky top-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-            <!-- Logo: imagen (sin cuadrado) + texto con colores originales -->
-            <a href="index.html" class="flex items-center space-x-2">
-
-                <!-- Texto con colores originales de InfiniHon -->
+            <a href="index.html" class="flex items-center space-x-2" data-cursor-interact>
                 <span class="text-white font-bold text-xl tracking-tight">
                     Infini<span class="text-blue-400">Hon</span>
                 </span>
             </a>
             
-            <!-- Menú de navegación (sin cambios) -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
-                <a href="servicios.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
-                <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
-                <a href="blog.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Blog</a>
-                <a href="alianzas.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Alianzas</a>
+                <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-cursor-interact>Inicio</a>
+                <a href="servicios.html" class="text-white text-sm font-medium border-b-2 border-blue-400 pb-1" data-cursor-interact>Servicios</a>
+                <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-cursor-interact>Tienda</a>
+                <a href="blog.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-cursor-interact>Blog</a>
+                <a href="alianzas.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-cursor-interact>Alianzas</a>
             </div>
             
-            <!-- Botón Contactar (sin cambios) -->
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all" data-cursor-interact>
                 Contactar
             </button>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section de Servicios -->
+<!-- Hero Section -->
 <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="text-center mb-16">
         <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <i data-lucide="briefcase" class="text-blue-400 w-4 h-4"></i>
             <span class="text-blue-400 text-sm font-medium">Soluciones Enterprise</span>
         </div>
         <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -100,73 +162,60 @@
         </p>
     </div>
 
-    <!-- Bento Grid Principal -->
+    <!-- Bento Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
         
-        <!-- Tarjeta 1: Administración de Redes MikroTik (doble altura) -->
-        <div class="bento-card md:row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+        <!-- Tarjeta 1: MikroTik -->
+        <div class="bento-card md:row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]" data-theme="#3b82f6" data-cursor-interact>
             <div class="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent"></div>
             
             <div class="relative p-8 h-full flex flex-col">
                 <div class="mb-6">
                     <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400/60 transition-all group-hover:scale-110 duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
-                            <line x1="8" y1="2" x2="8" y2="22"></line>
-                            <line x1="16" y1="2" x2="16" y2="22"></line>
-                            <line x1="2" y1="8" x2="22" y2="8"></line>
-                            <line x1="2" y1="16" x2="22" y2="16"></line>
-                            <circle cx="12" cy="12" r="2" fill="#60a5fa" stroke="none"></circle>
-                        </svg>
+                        <i data-lucide="router" class="text-blue-400 w-8 h-8"></i>
                     </div>
                 </div>
                 
                 <h3 class="text-2xl font-bold text-white mb-3">Administración de Redes MikroTik</h3>
                 <p class="text-gray-400 mb-6 leading-relaxed">
-                    Gestión profesional de infraestructura de red con RouterOS. Configuración avanzada de VPNs, firewalls, QoS y enrutamiento dinámico para empresas.
+                    Gestión profesional de infraestructura de red con RouterOS. Configuración avanzada de VPNs, firewalls, QoS y enrutamiento dinámico.
                 </p>
                 
                 <ul class="space-y-3 mb-8 flex-1">
                     <li class="flex items-center gap-3 text-gray-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <i data-lucide="check-circle" class="text-blue-400 w-5 h-5"></i>
                         <span class="text-sm">Configuración de RouterOS y SwOS</span>
                     </li>
                     <li class="flex items-center gap-3 text-gray-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <i data-lucide="check-circle" class="text-blue-400 w-5 h-5"></i>
                         <span class="text-sm">Implementación de MPLS y BGP</span>
                     </li>
                     <li class="flex items-center gap-3 text-gray-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <i data-lucide="check-circle" class="text-blue-400 w-5 h-5"></i>
                         <span class="text-sm">Monitorización con The Dude</span>
                     </li>
                 </ul>
                 
-                <button class="group/btn relative overflow-hidden bg-transparent border border-blue-500/30 hover:border-blue-400 text-blue-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit">
+                <button class="group/btn relative overflow-hidden bg-transparent border border-blue-500/30 hover:border-blue-400 text-blue-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit" data-cursor-interact>
                     <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
                     <span class="relative flex items-center gap-2">
                         Configurar red
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover/btn:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></i>
                     </span>
                 </button>
             </div>
         </div>
 
-        <!-- Tarjeta 2: Implementación de Clusters Raspberry Pi -->
-        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        <!-- Tarjeta 2: Raspberry Pi -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]" data-theme="#a855f7" data-cursor-interact>
             <div class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent"></div>
             
             <div class="relative p-6 h-full flex flex-col">
                 <div class="mb-4">
                     <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400/60 transition-all group-hover:scale-110 duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                            <circle cx="6" cy="10" r="1" fill="#c084fc" stroke="none"></circle>
-                            <circle cx="18" cy="10" r="1" fill="#c084fc" stroke="none"></circle>
-                        </svg>
+                        <i data-lucide="cpu" class="text-purple-400 w-7 h-7"></i>
                     </div>
                 </div>
                 
@@ -181,26 +230,22 @@
                     <span class="text-xs bg-purple-500/10 text-purple-400 px-2 py-1 rounded-full border border-purple-500/20">HA</span>
                 </div>
                 
-                <button class="text-purple-400 hover:text-white border border-purple-500/30 hover:border-purple-400 px-4 py-2 rounded-lg text-sm font-medium transition-all w-fit flex items-center gap-2">
+                <button class="text-purple-400 hover:text-white border border-purple-500/30 hover:border-purple-400 px-4 py-2 rounded-lg text-sm font-medium transition-all w-fit flex items-center gap-2" data-cursor-interact>
                     Implementar
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Tarjeta 3: Seguridad y Auditoría de Servidores -->
-        <div class="bento-card row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+        <!-- Tarjeta 3: Seguridad -->
+        <div class="bento-card md:row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]" data-theme="#06b6d4" data-cursor-interact>
             <div class="absolute inset-0 bg-gradient-to-b from-cyan-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent"></div>
             
             <div class="relative p-8 h-full flex flex-col">
                 <div class="mb-6">
                     <div class="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400/60 transition-all group-hover:scale-110 duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <path d="M12 8v4"></path>
-                            <path d="M12 16h.01"></path>
-                        </svg>
+                        <i data-lucide="shield-check" class="text-cyan-400 w-8 h-8"></i>
                     </div>
                 </div>
                 
@@ -220,62 +265,130 @@
                     </div>
                 </div>
                 
-                <button class="group/btn relative overflow-hidden bg-transparent border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit">
+                <button class="group/btn relative overflow-hidden bg-transparent border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit" data-cursor-interact>
                     <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
                     <span class="relative flex items-center gap-2">
                         Auditar sistemas
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></i>
                     </span>
                 </button>
             </div>
         </div>
 
-        <!-- Tarjeta 4: Consultoría Cloud (adicional para completar grid) -->
-        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+        <!-- Tarjeta 4: Cloud -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]" data-theme="#3b82f6" data-cursor-interact>
             <div class="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             
             <div class="relative p-6">
                 <div class="flex items-start justify-between mb-4">
                     <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/30">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
+                        <i data-lucide="cloud" class="text-blue-400 w-5 h-5"></i>
                     </div>
-                    <span class="text-xs bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full">Nuevo</span>
+                    <span class="text-xs bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full border border-blue-500/20">Nuevo</span>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">Consultoría Cloud</h3>
                 <p class="text-gray-400 text-sm mb-4">Estrategias de migración y optimización en AWS, Azure y Google Cloud.</p>
-                <button class="text-blue-400 hover:text-white text-sm flex items-center gap-1">
-                    Explorar <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                <button class="text-blue-400 hover:text-white text-sm flex items-center gap-1" data-cursor-interact>
+                    Explorar <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Tarjeta 5: Automatización DevOps -->
-        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500">
+        <!-- Tarjeta 5: DevOps -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500" data-theme="#a855f7" data-cursor-interact>
             <div class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             
             <div class="relative p-6">
                 <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30 mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    <i data-lucide="terminal" class="text-purple-400 w-5 h-5"></i>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">Automatización DevOps</h3>
-                <p class="text-gray-400 text-sm mb-4">CI/CD, infraestructura como código y automatización con Ansible.</p>
-                <button class="text-purple-400 hover:text-white text-sm flex items-center gap-1">
-                    Automatizar <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                <p class="text-gray-400 text-sm mb-4">CI/CD, infraestructura como código y automatización con Ansible y Terraform.</p>
+                <button class="text-purple-400 hover:text-white text-sm flex items-center gap-1" data-cursor-interact>
+                    Automatizar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta 6: Monitoreo -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-emerald-400/50 transition-all duration-500" data-theme="#10b981" data-cursor-interact>
+            <div class="absolute inset-0 bg-gradient-to-b from-emerald-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative p-6">
+                <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center border border-emerald-500/30 mb-4">
+                    <i data-lucide="activity" class="text-emerald-400 w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Monitoreo 24/7</h3>
+                <p class="text-gray-400 text-sm mb-4">Supervisión proactiva con alertas inteligentes y dashboards en tiempo real.</p>
+                <button class="text-emerald-400 hover:text-white text-sm flex items-center gap-1" data-cursor-interact>
+                    Conocer más <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Sección de Tecnologías Soportadas -->
-    <div class="mt-20 text-center">
-        <p class="text-gray-400 text-sm mb-6 font-mono-custom">TECNOLOGÍAS QUE IMPLEMENTAMOS</p>
-        <div class="flex flex-wrap justify-center gap-8 items-center opacity-60">
-            <span class="text-gray-500 text-xl font-mono-custom">MikroTik</span>
-            <span class="text-gray-500 text-xl font-mono-custom">Raspberry Pi</span>
-            <span class="text-gray-500 text-xl font-mono-custom">Docker</span>
-            <span class="text-gray-500 text-xl font-mono-custom">Kubernetes</span>
-            <span class="text-gray-500 text-xl font-mono-custom">Ansible</span>
-            <span class="text-gray-500 text-xl font-mono-custom">Terraform</span>
+    <!-- 🎯 NUEVO: CARRUSEL DE TECNOLOGÍAS -->
+    <div class="mt-20">
+        <p class="text-gray-400 text-sm mb-8 font-mono-custom tracking-wider text-center">TECNOLOGÍAS QUE IMPLEMENTAMOS</p>
+        
+        <div class="carousel-container py-4">
+            <div class="carousel-track">
+                <!-- Primera vuelta de items -->
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">MikroTik</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Raspberry Pi</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Docker</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Kubernetes</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Ansible</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Terraform</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Prometheus</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Grafana</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">GitLab CI</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Nginx</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">PostgreSQL</span>
+                
+                <!-- Segunda vuelta (duplicada para scroll infinito) -->
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">MikroTik</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Raspberry Pi</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Docker</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Kubernetes</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Ansible</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Terraform</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Prometheus</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Grafana</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">GitLab CI</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">Nginx</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60 mx-4">•</span>
+                <span class="tech-item text-gray-400 text-2xl font-mono-custom opacity-60">PostgreSQL</span>
+            </div>
+        </div>
+        
+        <!-- Indicadores de navegación del carrusel -->
+        <div class="flex justify-center gap-2 mt-6">
+            <button class="carousel-prev w-8 h-8 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center" data-cursor-interact>
+                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+            </button>
+            <button class="carousel-next w-8 h-8 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center" data-cursor-interact>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+            </button>
         </div>
     </div>
 </section>
@@ -288,27 +401,24 @@
             Nuestro equipo de expertos está listo para diseñar la solución perfecta para tus necesidades
         </p>
         <div class="flex flex-wrap gap-4 justify-center">
-            <button class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-medium transition-all flex items-center gap-2">
+            <button class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-medium transition-all flex items-center gap-2" data-cursor-interact>
                 Solicitar consultoría gratuita
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </button>
-            <button class="border border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-xl font-medium transition-all">
+            <button class="border border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-xl font-medium transition-all" data-cursor-interact>
                 Ver casos de éxito
             </button>
         </div>
     </div>
 </section>
 
-<!-- Footer (manteniendo consistencia) -->
+<!-- Footer -->
 <footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid md:grid-cols-4 gap-8">
             <div>
                 <div class="flex items-center space-x-2 mb-4">
-                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                        <span class="text-black font-bold text-xl">I</span>
-                    </div>
-                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                    <span class="text-white font-bold text-xl">Infini<span class="text-blue-400">Hon</span></span>
                 </div>
                 <p class="text-gray-400 text-sm">
                     Infraestructura IT de grado industrial para empresas modernas.
@@ -317,18 +427,18 @@
             <div>
                 <h4 class="text-white font-semibold mb-4">Servicios</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Redes MikroTik</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Clusters Raspberry</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Seguridad</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cloud</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Redes MikroTik</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Clusters Raspberry</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Seguridad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Cloud</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-white font-semibold mb-4">Compañía</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Sobre nosotros</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Carreras</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Blog</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Sobre nosotros</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Carreras</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-cursor-interact>Blog</a></li>
                 </ul>
             </div>
             <div>
@@ -345,18 +455,119 @@
     </div>
 </footer>
 
-<!-- Estilos adicionales -->
-<style>
-    @keyframes pulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 0.6; }
-    }
-    .animate-pulse {
-        animation: pulse 4s ease-in-out infinite;
-    }
-    .animation-delay-2000 {
-        animation-delay: 2s;
-    }
-</style>
+<script>
+    (function(){
+        lucide.createIcons();
+
+        // Cursor personalizado
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const aura = document.getElementById('cursor-aura');
+        
+        const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (isTouch) {
+            if(cursor) cursor.style.display = 'none';
+            if(aura) aura.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        } else {
+            document.addEventListener('mousemove', (e) => {
+                if(!cursor || !aura) return;
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                aura.style.left = e.clientX + 'px';
+                aura.style.top = e.clientY + 'px';
+            });
+
+            const interactiveElements = document.querySelectorAll('a, button, .bento-card, [data-cursor-interact]');
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                    cursor.style.width = '32px';
+                    cursor.style.height = '32px';
+                    
+                    let themeColor = null;
+                    const card = el.closest('.bento-card');
+                    if (card && card.dataset.theme) {
+                        themeColor = card.dataset.theme;
+                    } else if (el.dataset.theme) {
+                        themeColor = el.dataset.theme;
+                    }
+                    
+                    if (themeColor) {
+                        cursor.style.borderColor = themeColor;
+                        cursorDot.style.backgroundColor = themeColor;
+                        aura.style.background = `radial-gradient(circle, ${themeColor}33 0%, transparent 70%)`;
+                        cursor.style.mixBlendMode = 'normal';
+                    } else {
+                        cursor.style.borderColor = '#60a5fa';
+                        cursorDot.style.backgroundColor = '#60a5fa';
+                        aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%)';
+                        cursor.style.mixBlendMode = 'normal';
+                    }
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.width = '28px';
+                    cursor.style.height = '28px';
+                    cursor.style.borderColor = 'rgba(255, 255, 255, 0.9)';
+                    cursorDot.style.backgroundColor = 'white';
+                    cursor.style.mixBlendMode = 'difference';
+                    aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%)';
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if(cursor) cursor.style.opacity = '0';
+                if(aura) aura.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                if(cursor) cursor.style.opacity = '1';
+                if(aura) aura.style.opacity = '1';
+            });
+        }
+
+        // Control manual del carrusel
+        const track = document.querySelector('.carousel-track');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+        
+        if (track && prevBtn && nextBtn) {
+            let scrollAmount = 0;
+            const scrollStep = 200;
+            
+            prevBtn.addEventListener('click', () => {
+                track.style.animation = 'none';
+                scrollAmount -= scrollStep;
+                if (scrollAmount < 0) scrollAmount = 0;
+                track.style.transform = `translateX(-${scrollAmount}px)`;
+                
+                setTimeout(() => {
+                    track.style.animation = 'scroll 25s linear infinite';
+                }, 3000);
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                track.style.animation = 'none';
+                const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+                scrollAmount += scrollStep;
+                if (scrollAmount > maxScroll) scrollAmount = maxScroll;
+                track.style.transform = `translateX(-${scrollAmount}px)`;
+                
+                setTimeout(() => {
+                    track.style.animation = 'scroll 25s linear infinite';
+                }, 3000);
+            });
+            
+            // Reactivar animación al hacer hover out si estaba pausada
+            track.addEventListener('mouseleave', () => {
+                track.style.animation = 'scroll 25s linear infinite';
+            });
+        }
+    })();
+</script>
 </body>
 </html>
