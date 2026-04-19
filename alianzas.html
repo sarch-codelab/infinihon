@@ -1,31 +1,113 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Alianzas y Ecosistema</title>
+    <title>InfiniHon | Alianzas y Ecosistema Estratégico</title>
+    
+    <!-- Tailwind + Fuentes premium -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+        :root { 
+            --bg-deep: #020617; 
+            --accent: #3b82f6;
+            --silver: #94a3b8;
+        }
+        
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none !important;
+        }
+
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
         }
         
         body {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
-                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
-                              radial-gradient(circle at 40% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            background-color: var(--bg-deep);
+            color: #f8fafc;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Personalizado: Estilo Retícula Avanzado */
+        #custom-cursor {
+            width: 24px; 
+            height: 24px; 
+            border: 2px solid white;
+            border-radius: 50%;
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
         }
         
-        /* Glassmorphism extremo */
+        #cursor-dot {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            width: 5px; 
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.3s ease;
+        }
+
+        #cursor-aura {
+            width: 450px; 
+            height: 450px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9998;
+            border-radius: 50%;
+            transform: translate(-50%, -50%); 
+            transition: opacity 0.5s ease, background 0.3s ease;
+            will-change: left, top;
+        }
+
+        /* Efecto Ping al hacer clic */
+        .ping-effect {
+            position: fixed; 
+            width: 20px; 
+            height: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.8);
+            border-radius: 50%; 
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: ping-anim 0.6s ease-out forwards;
+            z-index: 10000;
+        }
+        
+        @keyframes ping-anim {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+        }
+
+        /* Glassmorphism Refinado */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(59, 130, 246, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
         
         .glass-card:hover {
@@ -33,63 +115,79 @@
             box-shadow: 0 8px 40px rgba(59, 130, 246, 0.2);
         }
         
-        /* Animaciones de revelado */
-        .reveal {
+        /* Bento Grids Animados con 3D */
+        .bento-card { 
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            transform-style: preserve-3d;
+        }
+        
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02) translateY(-5px);
+        }
+
+        /* Fondo animado de malla (Mesh Gradient) */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.12), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.12), transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.08), transparent 50%),
+                radial-gradient(circle at 30% 90%, rgba(168, 85, 247, 0.06), transparent 60%);
+            animation: meshMove 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% { transform: scale(1) translate(0, 0); }
+            33% { transform: scale(1.15) translate(-1%, 2%); }
+            66% { transform: scale(1.1) translate(2%, -1%); }
+            100% { transform: scale(1.2) translate(1%, 3%); }
+        }
+
+        /* Tipografía fluida */
+        .title-fluid {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1.1;
+        }
+        
+        /* Animaciones de revelado mejoradas */
+        .reveal, .reveal-scale, .reveal-left, .reveal-right {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .reveal { transform: translateY(50px); }
+        .reveal-left { transform: translateX(-50px); }
+        .reveal-right { transform: translateX(50px); }
+        .reveal-scale { transform: scale(0.85); }
         
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .active { opacity: 1; transform: translate(0) scale(1); }
         
-        .reveal-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .reveal-left.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .reveal-right {
-            opacity: 0;
-            transform: translateX(40px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .reveal-right.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .reveal-scale.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        /* Retrasos de animación */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
         .delay-4 { transition-delay: 0.4s; }
         .delay-5 { transition-delay: 0.5s; }
         
+        /* Degradado azul-plata dinámico */
+        .blue-silver-gradient {
+            background: linear-gradient(135deg, #1e3a8a, #475569, #1e3a8a, #64748b);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         /* Botón con efecto de brillo */
         .glow-button {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.15));
             border: 1px solid rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
         }
@@ -101,251 +199,278 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            transition: left 0.6s ease;
         }
         
         .glow-button:hover {
             border-color: rgba(59, 130, 246, 0.8);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+            transform: translateY(-3px);
         }
         
         .glow-button:hover::before {
             left: 100%;
         }
-        
-        /* Degradados azul a plata */
-        .blue-silver-gradient {
-            background: linear-gradient(135deg, #1e40af, #64748b, #1e40af);
-            background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
+
         /* Scroll suave */
         html {
             scroll-behavior: smooth;
         }
         
-        /* Estilo para bordes cobalto */
+        /* Efecto de brillo en bordes */
         .cobalt-border {
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: border-color 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
         }
         
         .cobalt-border:hover {
-            border-color: rgba(59, 130, 246, 0.8);
-        }
-        
-        /* Fondo con partículas */
-        .particle-bg {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .particle-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
-            pointer-events: none;
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
         }
     </style>
 </head>
-<body class="relative">
+<body class="selection:bg-blue-500/30 relative">
 
-<!-- Header minimalista -->
-<nav class="relative z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm sticky top-0">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                    <span class="text-black font-bold text-xl">I</span>
-                </div>
-                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+<!-- Cursor personalizado avanzado -->
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<!-- Fondo mesh animado -->
+<div class="mesh-bg"></div>
+
+<!-- Partículas de fondo adicionales -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-80 h-80 bg-cyan-600/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-3xl"></div>
+</div>
+
+<!-- Header / Navegación -->
+<nav class="sticky top-0 z-50 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3 tilt-card">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="cpu" class="text-black w-6 h-6"></i>
             </div>
-            <div class="hidden md:flex items-center space-x-12">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">INICIO</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SERVICIOS</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SOBRE NOSOTROS</a>
-                <a href="#" class="text-white transition-colors text-sm font-medium tracking-wide border-b border-blue-400 pb-1">ALIANZAS</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">CONTACTO</a>
-            </div>
+            <span class="text-white font-bold text-xl tracking-tight">
+                𝓘𝓷𝓯𝓲𝓷𝓲<span class="text-blue-400">𝓗𝓸𝓷</span>
+            </span>
         </div>
+        
+        <!-- Navegación -->
+        <div class="hidden md:flex items-center space-x-10 text-sm font-semibold">
+            <a href="index.html" class="interactive text-gray-300 hover:text-white transition-colors">Inicio</a>
+            <a href="servicios.html" class="interactive text-gray-300 hover:text-white transition-colors">Servicios</a>
+            <a href="tienda.html" class="interactive text-gray-300 hover:text-white transition-colors">Tienda</a>
+            <a href="#" class="interactive text-white transition-colors border-b-2 border-blue-400 pb-1">Alianzas</a>
+            <a href="contacto.html" class="interactive text-gray-300 hover:text-white transition-colors">Contacto</a>
+        </div>
+        
+        <!-- Botón contacto rápido -->
+        <a href="contacto.html" class="interactive bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-4 py-2 rounded-lg text-sm font-medium border border-blue-500/30 transition-all">
+            Partner Login
+        </a>
     </div>
 </nav>
 
-<!-- Hero Section - Texto centrado con glassmorphism -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 particle-bg">
-    <div class="glass-card max-w-4xl mx-auto rounded-3xl p-16 text-center reveal active">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// ALIANZAS ESTRATÉGICAS</span>
-        <h1 class="text-5xl lg:text-7xl font-light text-white mb-8 leading-tight">
+<!-- Hero Section - Texto centrado con glassmorphism extremo -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+    <div class="glass-card tilt-card interactive max-w-4xl mx-auto rounded-[3rem] p-10 sm:p-16 text-center reveal active">
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.25em] mb-6 block" style="transform: translateZ(30px);">
+            // ALIANZAS ESTRATÉGICAS
+        </span>
+        
+        <h1 class="title-fluid font-extrabold text-white mb-8 tracking-tighter" style="transform: translateZ(50px);">
             Conectando Visiones,<br>
-            <span class="font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Potenciando Infraestructuras</span>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400">
+                Potenciando Infraestructuras
+            </span>
         </h1>
-        <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+        
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed font-light" style="transform: translateZ(20px);">
             Construimos un ecosistema de partners tecnológicos para ofrecer soluciones integrales 
-            de vanguardia en infraestructura IT.
+            de vanguardia en infraestructura IT de grado industrial.
         </p>
         
         <!-- Indicador scroll -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="text-blue-400 w-6 h-6"></i>
         </div>
     </div>
 </section>
 
-<!-- Módulos de Socios - Tarjetas traslúcidas -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+<!-- Módulos de Socios - Tarjetas traslúcidas con 3D Tilt -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <div class="text-center mb-16 reveal">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// NUESTRO ECOSISTEMA</span>
-        <h2 class="text-4xl font-light text-white mb-4">Socios Estratégicos</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto font-light">
-            Colaboramos con líderes tecnológicos para ofrecer soluciones integrales
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] mb-4 block">// NUESTRO ECOSISTEMA</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">Socios Estratégicos</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">
+            Colaboramos con líderes tecnológicos mundiales para ofrecer excelencia
         </p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Grid principal de socios -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
         <!-- Socio 1 - MikroTik -->
-        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-1 group">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-transparent flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line><line x1="2" y1="8" x2="22" y2="8"></line><line x1="2" y1="16" x2="22" y2="16"></line></svg>
+        <div class="bento-card glass tilt-card interactive rounded-[2rem] p-8 text-center reveal-scale delay-1 group" data-theme="#3b82f6">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400 transition-all" style="transform: translateZ(40px);">
+                <i data-lucide="router" class="text-blue-400 w-12 h-12"></i>
             </div>
-            <h3 class="text-xl font-medium text-white mb-2">MikroTik</h3>
+            <h3 class="text-xl font-bold text-white mb-2" style="transform: translateZ(20px);">MikroTik</h3>
             <p class="text-gray-400 text-sm font-light">Platinum Partner</p>
-            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2025</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono-custom">DESDE 2025</p>
+            
+            <!-- Badge de nivel -->
+            <div class="mt-4 flex justify-center">
+                <span class="text-[10px] bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30 font-mono-custom">NIVEL 1</span>
+            </div>
         </div>
 
         <!-- Socio 2 - Raspberry Pi -->
-        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-2 group">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-transparent flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><circle cx="6" cy="10" r="1" fill="#c084fc" stroke="none"></circle><circle cx="18" cy="10" r="1" fill="#c084fc" stroke="none"></circle></svg>
+        <div class="bento-card glass tilt-card interactive rounded-[2rem] p-8 text-center reveal-scale delay-2 group" data-theme="#a855f7">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400 transition-all" style="transform: translateZ(40px);">
+                <i data-lucide="cpu" class="text-purple-400 w-12 h-12"></i>
             </div>
-            <h3 class="text-xl font-medium text-white mb-2">Raspberry Pi</h3>
+            <h3 class="text-xl font-bold text-white mb-2" style="transform: translateZ(20px);">Raspberry Pi</h3>
             <p class="text-gray-400 text-sm font-light">Design Partner</p>
-            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2026</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono-custom">DESDE 2026</p>
+            
+            <div class="mt-4 flex justify-center">
+                <span class="text-[10px] bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30 font-mono-custom">NIVEL 2</span>
+            </div>
         </div>
 
         <!-- Socio 3 - Nation II -->
-        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-3 group">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-transparent flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+        <div class="bento-card glass tilt-card interactive rounded-[2rem] p-8 text-center reveal-scale delay-3 group" data-theme="#06b6d4">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 transition-all" style="transform: translateZ(40px);">
+                <i data-lucide="shield-check" class="text-cyan-400 w-12 h-12"></i>
             </div>
-            <h3 class="text-xl font-medium text-white mb-2">Nation II</h3>
+            <h3 class="text-xl font-bold text-white mb-2" style="transform: translateZ(20px);">Nation II</h3>
             <p class="text-gray-400 text-sm font-light">Strategic Partner</p>
-            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2027</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono-custom">DESDE 2027</p>
+            
+            <div class="mt-4 flex justify-center">
+                <span class="text-[10px] bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/30 font-mono-custom">NIVEL 1</span>
+            </div>
         </div>
 
         <!-- Socio 4 - AWS -->
-        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-4 group">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-orange-500/20 to-transparent flex items-center justify-center border border-orange-500/30 group-hover:border-orange-400 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
+        <div class="bento-card glass tilt-card interactive rounded-[2rem] p-8 text-center reveal-scale delay-4 group" data-theme="#f97316">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-orange-500/20 flex items-center justify-center border border-orange-500/30 group-hover:border-orange-400 transition-all" style="transform: translateZ(40px);">
+                <i data-lucide="cloud" class="text-orange-400 w-12 h-12"></i>
             </div>
-            <h3 class="text-xl font-medium text-white mb-2">AWS</h3>
+            <h3 class="text-xl font-bold text-white mb-2" style="transform: translateZ(20px);">AWS</h3>
             <p class="text-gray-400 text-sm font-light">Advanced Partner</p>
-            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2026</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono-custom">DESDE 2026</p>
+            
+            <div class="mt-4 flex justify-center">
+                <span class="text-[10px] bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full border border-orange-500/30 font-mono-custom">NIVEL 2</span>
+            </div>
         </div>
     </div>
 
-    <!-- Fila adicional de socios -->
-    <div class="grid md:grid-cols-3 gap-6 mt-6">
-        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-1">
-            <div class="text-white font-medium">Cisco</div>
-            <div class="text-gray-400 text-xs mt-2 font-mono">GOLD PARTNER</div>
+    <!-- Fila adicional de socios premium -->
+    <div class="grid sm:grid-cols-3 gap-6 mt-8">
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-2 tilt-card interactive">
+            <div class="text-white font-bold text-lg mb-1">Cisco</div>
+            <div class="text-gray-400 text-xs font-mono-custom">GOLD PARTNER</div>
+            <div class="mt-3 h-0.5 w-12 bg-blue-500/30 mx-auto"></div>
         </div>
-        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-2">
-            <div class="text-white font-medium">Dell Technologies</div>
-            <div class="text-gray-400 text-xs mt-2 font-mono">TITANIUM PARTNER</div>
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-3 tilt-card interactive">
+            <div class="text-white font-bold text-lg mb-1">Dell Technologies</div>
+            <div class="text-gray-400 text-xs font-mono-custom">TITANIUM PARTNER</div>
+            <div class="mt-3 h-0.5 w-12 bg-blue-500/30 mx-auto"></div>
         </div>
-        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-3">
-            <div class="text-white font-medium">Red Hat</div>
-            <div class="text-gray-400 text-xs mt-2 font-mono">PREMIER PARTNER</div>
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-4 tilt-card interactive">
+            <div class="text-white font-bold text-lg mb-1">Red Hat</div>
+            <div class="text-gray-400 text-xs font-mono-custom">PREMIER PARTNER</div>
+            <div class="mt-3 h-0.5 w-12 bg-blue-500/30 mx-auto"></div>
         </div>
     </div>
 </section>
 
-<!-- Sección de Homenaje - Diseño asimétrico -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <!-- Columna izquierda - Foto placeholder con efecto glass -->
+<!-- Sección de Homenaje - Diseño asimétrico con CEO -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 overflow-hidden">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Columna izquierda - Foto con efectos -->
         <div class="reveal-left">
             <div class="relative">
                 <!-- Efecto de degradado detrás -->
-                <div class="absolute -inset-4 blue-silver-gradient rounded-3xl opacity-30 blur-2xl"></div>
+                <div class="absolute -inset-4 blue-silver-gradient rounded-[3rem] opacity-30 blur-3xl"></div>
                 
                 <!-- Contenedor de imagen con glassmorphism -->
-                <div class="relative glass-card rounded-3xl overflow-hidden aspect-[4/5]">
+                <div class="relative glass tilt-card interactive rounded-[3rem] overflow-hidden aspect-[4/5]">
                     <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-transparent to-cyan-600/20"></div>
                     
-                    <!-- Placeholder de imagen profesional (simulado con gradiente) -->
-                    <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-end">
-                        <div class="p-8 glass-card border-0 border-t border-white/10 w-full">
+                    <!-- Imagen simulada profesional -->
+                    <div class="w-full h-full bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 flex items-end">
+                        <div class="p-6 sm:p-8 glass border-0 border-t border-white/10 w-full" style="transform: translateZ(30px);">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-400/30 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/30 to-cyan-500/30 border border-blue-400/30 flex items-center justify-center">
+                                    <span class="text-blue-400 font-bold text-xl">JS</span>
                                 </div>
                                 <div>
-                                    <div class="text-white font-medium">Joseph Sanchez</div>
+                                    <div class="text-white font-bold text-lg">Joseph Sanchez</div>
                                     <div class="text-gray-400 text-sm">Fundador & CEO</div>
+                                    <div class="text-blue-400 text-xs mt-1 font-mono-custom">20+ años en IT</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Efecto de brillo esquina -->
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+                    <!-- Efectos de brillo -->
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
                 </div>
                 
                 <!-- Elementos decorativos asimétricos -->
-                <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-20 blur-2xl"></div>
-                <div class="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full opacity-20 blur-2xl"></div>
+                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-20 blur-3xl"></div>
+                <div class="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full opacity-20 blur-3xl"></div>
             </div>
         </div>
         
         <!-- Columna derecha - Texto sobre filosofía -->
         <div class="reveal-right">
-            <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// NUESTRA FILOSOFÍA</span>
-            <h2 class="text-4xl lg:text-5xl font-light text-white mb-8 leading-tight">
+            <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] mb-6 block">// NUESTRA FILOSOFÍA</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-8 leading-tight tracking-tighter">
                 Construimos más que<br>
-                <span class="font-medium bg-gradient-to-r from-blue-400 via-silver to-cyan-400 bg-clip-text text-transparent">infraestructura</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-silver to-cyan-400">
+                    infraestructura
+                </span>
             </h2>
             
-            <div class="space-y-6 text-gray-300 font-light leading-relaxed">
+            <div class="space-y-6 text-gray-300 text-lg leading-relaxed font-light">
                 <p>
                     En InfiniHon creemos que la verdadera innovación surge de la colaboración auténtica. 
                     Cada alianza que formamos está basada en la confianza mutua y el compromiso con la excelencia técnica.
                 </p>
                 <p>
                     Nuestra filosofía de trabajo se centra en tres pilares fundamentales: 
-                    <span class="text-blue-400">transparencia absoluta</span>, 
-                    <span class="text-cyan-400">innovación continua</span> y 
-                    <span class="text-blue-300">compromiso inquebrantable</span> con la calidad.
+                    <span class="text-blue-400 font-medium">transparencia absoluta</span>, 
+                    <span class="text-cyan-400 font-medium">innovación continua</span> y 
+                    <span class="text-blue-300 font-medium">compromiso inquebrantable</span> con la calidad.
                 </p>
                 <p>
-                    No buscamos socios, buscamos visionarios que compartan nuestra pasión por construir 
-                    el futuro de la infraestructura tecnológica.
+                    No buscamos simplemente socios comerciales; buscamos visionarios que compartan nuestra pasión 
+                    por construir el futuro de la infraestructura tecnológica global.
                 </p>
             </div>
             
             <!-- Métricas de alianzas -->
-            <div class="grid grid-cols-3 gap-6 mt-12">
+            <div class="grid grid-cols-3 gap-8 mt-12">
                 <div>
-                    <div class="text-3xl font-light text-white">25+</div>
-                    <div class="text-gray-400 text-xs font-mono">SOCIOS ACTIVOS</div>
+                    <div class="text-4xl font-bold text-white">25<span class="text-blue-400">+</span></div>
+                    <div class="text-gray-400 text-xs font-mono-custom tracking-wider mt-1">SOCIOS ACTIVOS</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-light text-white">15</div>
-                    <div class="text-gray-400 text-xs font-mono">PAÍSES</div>
+                    <div class="text-4xl font-bold text-white">15</div>
+                    <div class="text-gray-400 text-xs font-mono-custom tracking-wider mt-1">PAÍSES</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-light text-white">3</div>
-                    <div class="text-gray-400 text-xs font-mono">CONTINENTES</div>
+                    <div class="text-4xl font-bold text-white">3</div>
+                    <div class="text-gray-400 text-xs font-mono-custom tracking-wider mt-1">CONTINENTES</div>
                 </div>
             </div>
         </div>
@@ -353,104 +478,290 @@
 </section>
 
 <!-- Sección de Beneficios para Socios -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="glass-card rounded-3xl p-16 reveal">
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="glass-card rounded-[3rem] p-12 sm:p-16 reveal">
         <div class="text-center mb-16">
-            <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// VENTAJAS EXCLUSIVAS</span>
-            <h2 class="text-4xl font-light text-white mb-4">¿Por qué ser socio de InfiniHon?</h2>
+            <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] mb-4 block">// VENTAJAS EXCLUSIVAS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">¿Por qué ser socio de InfiniHon?</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Accede a beneficios diseñados para potenciar tu negocio y expandir tus capacidades tecnológicas
+            </p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-10">
             <div class="text-center reveal-scale delay-1">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M12 2v20"></path><path d="M2 12h20"></path><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400 transition-all">
+                    <i data-lucide="rocket" class="text-blue-400 w-10 h-10"></i>
                 </div>
-                <h3 class="text-xl text-white mb-2">Acceso Prioritario</h3>
-                <p class="text-gray-400 text-sm font-light">A nuevas tecnologías y desarrollos antes de su lanzamiento al mercado</p>
+                <h3 class="text-xl font-bold text-white mb-3">Acceso Prioritario</h3>
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Accede a nuevas tecnologías y desarrollos antes de su lanzamiento al mercado. 
+                    Sé el primero en implementar soluciones de vanguardia.
+                </p>
             </div>
             
             <div class="text-center reveal-scale delay-2">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><circle cx="12" cy="8" r="0.5" fill="#22d3ee" stroke="none"></circle></svg>
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 transition-all">
+                    <i data-lucide="graduation-cap" class="text-cyan-400 w-10 h-10"></i>
                 </div>
-                <h3 class="text-xl text-white mb-2">Formación Continua</h3>
-                <p class="text-gray-400 text-sm font-light">Programas de capacitación técnica y certificaciones exclusivas</p>
+                <h3 class="text-xl font-bold text-white mb-3">Formación Continua</h3>
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Programas de capacitación técnica avanzada y certificaciones exclusivas 
+                    para mantener a tu equipo en la cima de la industria.
+                </p>
             </div>
             
             <div class="text-center reveal-scale delay-3">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M12 22V12"></path><path d="M3.3 7 12 12l8.7-5"></path></svg>
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400 transition-all">
+                    <i data-lucide="headset" class="text-purple-400 w-10 h-10"></i>
                 </div>
-                <h3 class="text-xl text-white mb-2">Soporte Dedicado</h3>
-                <p class="text-gray-400 text-sm font-light">Equipo de atención exclusivo para socios estratégicos 24/7</p>
+                <h3 class="text-xl font-bold text-white mb-3">Soporte Dedicado 24/7</h3>
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Equipo de atención exclusivo para socios estratégicos. Respuesta garantizada 
+                    en menos de 15 minutos para incidencias críticas.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Beneficios adicionales -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 pt-8 border-t border-white/10">
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="text-green-400 w-5 h-5"></i>
+                <span class="text-gray-300 text-sm">Margen preferencial</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="text-green-400 w-5 h-5"></i>
+                <span class="text-gray-300 text-sm">Co-marketing</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="text-green-400 w-5 h-5"></i>
+                <span class="text-gray-300 text-sm">Preventa conjunta</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="text-green-400 w-5 h-5"></i>
+                <span class="text-gray-300 text-sm">Eventos exclusivos</span>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA - Botón Convertirse en Socio -->
+<!-- CTA - Convertirse en Socio -->
 <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-    <div class="reveal-scale">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// ÚNETE AL ECOSISTEMA</span>
-        <h2 class="text-4xl font-light text-white mb-8">Forma parte de nuestra red de partners</h2>
+    <div class="reveal-scale flex flex-col items-center">
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.25em] mb-6 block">// ÚNETE AL ECOSISTEMA</span>
+        <h2 class="title-fluid font-extrabold text-white mb-8 tracking-tighter max-w-4xl">
+            Forma parte de nuestra red global de partners
+        </h2>
+        <p class="text-gray-400 text-lg max-w-2xl mb-10">
+            Únete a las empresas líderes que ya confían en InfiniHon para potenciar su infraestructura tecnológica
+        </p>
         
-        <button class="glow-button px-12 py-6 rounded-2xl text-white text-lg font-light tracking-wide">
+        <button id="magneticBtn" class="glow-button px-12 sm:px-16 py-6 sm:py-7 rounded-2xl text-white text-lg sm:text-xl font-bold transition-all flex items-center gap-3 group interactive tilt-card">
             Convertirse en Socio Estratégico
+            <i data-lucide="arrow-right" class="w-6 h-6 group-hover:translate-x-2 transition-transform"></i>
         </button>
         
-        <p class="text-gray-400 text-sm mt-8 font-light">
-            Únete a las empresas líderes que ya confían en nosotros
+        <p class="text-gray-500 text-sm mt-8 font-light">
+            * Proceso de aprobación en menos de 48 horas
         </p>
     </div>
 </section>
 
-<!-- Footer minimalista -->
-<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/5 glass mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex justify-between items-center">
-            <div class="text-gray-500 text-xs font-mono">
+        <div class="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-lg">I</span>
+                    </div>
+                    <span class="text-white font-bold text-lg">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm font-light">
+                    Infraestructura IT de grado industrial. Potenciando el futuro digital.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4 text-sm">Alianzas</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">MikroTik</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Raspberry Pi</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">AWS</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4 text-sm">Recursos</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Portal de Partners</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Documentación</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Soporte</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4 text-sm">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Privacidad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Términos</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors interactive">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-gray-500 text-xs font-mono-custom">
                 © 2025 INFINIHON · ALIANZAS Y ECOSISTEMA
             </div>
-            <div class="flex gap-8">
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">TÉRMINOS</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">CONTACTO</a>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono-custom transition-colors interactive">PRIVACIDAD</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono-custom transition-colors interactive">TÉRMINOS</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono-custom transition-colors interactive">CONTACTO</a>
             </div>
         </div>
     </div>
 </footer>
 
-<!-- Script para animaciones de revelado al hacer scroll -->
 <script>
-    // Función para verificar si un elemento está visible en el viewport
-    function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
-            rect.bottom >= 0
-        );
-    }
-    
-    // Función para activar elementos revelados
-    function handleReveal() {
-        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    (function(){
+        // --- 1. Inicializar iconos de Lucide ---
+        lucide.createIcons();
+
+        // --- 2. Lógica del Cursor Personalizado Avanzado ---
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const aura = document.getElementById('cursor-aura');
         
-        revealElements.forEach(element => {
-            if (isElementInViewport(element)) {
-                element.classList.add('active');
-            }
+        const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (isTouch) {
+            if(cursor) cursor.style.display = 'none';
+            if(aura) aura.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        } else {
+            document.addEventListener('mousemove', (e) => {
+                if(!cursor || !aura) return;
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                aura.style.left = e.clientX + 'px';
+                aura.style.top = e.clientY + 'px';
+            });
+
+            // Efecto Ping al hacer clic
+            document.addEventListener('mousedown', (e) => {
+                const ping = document.createElement('div');
+                ping.className = 'ping-effect';
+                const currentColor = cursor.style.borderColor || 'rgba(59, 130, 246, 0.8)';
+                if(currentColor !== 'white' && currentColor !== 'rgba(255, 255, 255, 0.9)') {
+                    ping.style.borderColor = currentColor;
+                }
+                ping.style.left = e.clientX + 'px';
+                ping.style.top = e.clientY + 'px';
+                document.body.appendChild(ping);
+                setTimeout(() => ping.remove(), 600);
+            });
+
+            // Interactividad
+            const interactiveElements = document.querySelectorAll('button, a, .bento-card, .interactive, .tilt-card');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                    cursor.style.width = '32px';
+                    cursor.style.height = '32px';
+                    
+                    let themeColor = null;
+                    const card = el.closest('.bento-card');
+                    if (card && card.dataset.theme) {
+                        themeColor = card.dataset.theme;
+                    } else if (el.dataset.theme) {
+                        themeColor = el.dataset.theme;
+                    }
+                    
+                    if (themeColor) {
+                        cursor.style.borderColor = themeColor;
+                        cursorDot.style.backgroundColor = themeColor;
+                        aura.style.background = `radial-gradient(circle, ${themeColor}33 0%, transparent 70%)`;
+                        cursor.style.mixBlendMode = 'normal';
+                    } else {
+                        cursor.style.borderColor = '#60a5fa';
+                        cursorDot.style.backgroundColor = '#60a5fa';
+                        aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%)';
+                        cursor.style.mixBlendMode = 'normal';
+                    }
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.width = '24px';
+                    cursor.style.height = '24px';
+                    cursor.style.borderColor = 'white';
+                    cursorDot.style.backgroundColor = 'white';
+                    cursor.style.mixBlendMode = 'difference';
+                    aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%)';
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if(cursor) cursor.style.opacity = '0';
+                if(aura) aura.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                if(cursor) cursor.style.opacity = '1';
+                if(aura) aura.style.opacity = '1';
+            });
+        }
+
+        // --- 3. Animaciones de Revelado al Scroll ---
+        function handleReveal() {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+            reveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', handleReveal);
+        document.addEventListener('DOMContentLoaded', handleReveal);
+        setTimeout(handleReveal, 100);
+
+        // --- 4. Efecto 3D Tilt ---
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
         });
-    }
-    
-    // Escuchar eventos de scroll
-    window.addEventListener('scroll', handleReveal);
-    window.addEventListener('resize', handleReveal);
-    
-    // Activar elementos visibles al cargar la página
-    document.addEventListener('DOMContentLoaded', handleReveal);
-    
-    // Activar elementos que ya están visibles
-    setTimeout(handleReveal, 100);
+
+        // --- 5. Botón Magnético ---
+        const magneticBtn = document.getElementById('magneticBtn');
+        if(magneticBtn) {
+            magneticBtn.addEventListener('mousemove', (e) => {
+                const rect = magneticBtn.getBoundingClientRect();
+                const x = (e.clientX - rect.left) - rect.width / 2;
+                const y = (e.clientY - rect.top) - rect.height / 2;
+                
+                magneticBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) perspective(1000px) scale3d(1.05, 1.05, 1.05)`;
+            });
+            
+            magneticBtn.addEventListener('mouseleave', () => {
+                magneticBtn.style.transform = `translate(0px, 0px) perspective(1000px) scale3d(1, 1, 1)`;
+            });
+        }
+    })();
 </script>
 </body>
 </html>
