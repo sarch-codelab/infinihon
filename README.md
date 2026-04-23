@@ -1,114 +1,53 @@
-# 🚀 InfiniHon - Plataforma de Infraestructura IT
+# 🚀 InfiniHon - Infraestructura IT de Grado Industrial
 
-<div align="center">
-  
-  ![InfiniHon Logo](https://img.sanishtech.com/u/985b4a9e7be8a33c261b5c10d9ed14ca.png)
-  
-  ### Infraestructura de Grado Industrial para Empresas Modernas
-  
-  [![Website](https://img.shields.io/badge/Website-infinihon.vercel.app-blue?style=for-the-badge&logo=google-chrome)](infinihon.vercel.app)
-  [![GitHub](https://img.shields.io/badge/GitHub-InfiniHon-181717?style=for-the-badge&logo=github)](https://github.com/infinihon)
-  [![Instagram](https://img.shields.io/badge/Instagram-@InfiniHon-1DA1F2?style=for-the-badge&logo=instagram)](https://instagram.com/infinihon)
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-InfiniHon-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/company/infinihon)
+<p align="center">
+  <img src="https://infinihon.vercel.app/og-image.jpg" alt="InfiniHon Banner" width="800">
+</p>
 
-  [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-  [![Version](https://img.shields.io/badge/Version-2.5.0-blue)](https://github.com/infinihon/platform/releases)
-  [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](https://github.com/infinihon/platform/actions)
-  
-</div>
+<p align="center">
+  <a href="https://infinihon.vercel.app"><img src="https://img.shields.io/badge/🌐-Website-blue?style=for-the-badge" alt="Website"></a>
+  <a href="https://github.com/sarch-codelab/infinihon/stargazers"><img src="https://img.shields.io/github/stars/sarch-codelab/infinihon?style=for-the-badge&color=yellow" alt="Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"></a>
+  <a href="https://infinihon.vercel.app/tienda.html"><img src="https://img.shields.io/badge/🛒-Tienda-orange?style=for-the-badge" alt="Tienda"></a>
+</p>
 
----
+> **Lema**: Conectando Visiones, Potenciando Infraestructuras · Honduras 🇭🇳
 
-## 📋 Tabla de Contenidos
+## 📊 Métricas en Tiempo Real
+- 🌐 **Servidores gestionados**: 2,847+
+- 👥 **Clientes activos**: 500+
+- 🌍 **Países**: 15
+- ⚡ **Uptime**: 99.99%
+- 🔒 **Certificaciones**: ISO 27001, SOC 2 Type II
 
-- [Descripción del Proyecto](#-descripción-del-proyecto)
-- [Características Principales](#-características-principales)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Uso](#-uso)
-- [Módulos del Sistema](#-módulos-del-sistema)
-- [API Reference](#-api-reference)
-- [Contribución](#-contribución)
-- [Equipo](#-equipo)
-- [Licencia](#-licencia)
-- [Contacto](#-contacto)
+## 🎯 ¿Qué es InfiniHon?
+InfiniHon es la **primera plataforma hondureña** de infraestructura IT de grado industrial...
 
----
+## 🏗️ Arquitectura del Proyecto
+[Diagrama de la estructura de archivos]
 
-## 🎯 Descripción del Proyecto
+## 🛠️ Stack Tecnológico
+| Frontend | Backend | Base de Datos | DevOps |
+|----------|---------|---------------|--------|
+| HTML5, CSS3, JavaScript | Node.js (próximamente) | SQLite Cloud | Vercel |
+| Tailwind CSS | API REST | LocalStorage | GitHub Actions |
+| Lucide Icons | Autenticación JWT | - | - |
 
-**InfiniHon** es una plataforma integral de gestión de infraestructura IT diseñada para empresas que requieren soluciones de alto rendimiento. Nuestro sistema permite administrar redes MikroTik, clusters de Raspberry Pi, servidores Nation II y proporciona herramientas avanzadas de monitoreo y seguridad.
+## 🚀 Cómo contribuir
+1. Fork el repositorio
+2. Crea tu rama: `git checkout -b feature/nueva-funcionalidad`
+3. Commit: `git commit -m 'feat: añade nueva funcionalidad'`
+4. Push: `git push origin feature/nueva-funcionalidad`
+5. Abre un Pull Request
 
-> "Conectando Visiones, Potenciando Infraestructuras"
+## 👥 Equipo
+| Miembro | Rol | Contacto |
+|---------|-----|----------|
+| Joseph Sánchez | CEO & Fundador | [LinkedIn](#) |
+| [Contratando] | Desarrollador Full Stack | careers@infinihon.com |
 
-### 🏢 Casos de Uso
-
-- **Empresas Tecnológicas**: Gestión de infraestructura cloud y on-premise
-- **Data Centers**: Monitoreo y administración de servidores
-- **Telecomunicaciones**: Configuración y mantenimiento de redes MikroTik
-- **Educación**: Clusters de Raspberry Pi para investigación y desarrollo
-- **Startups**: Infraestructura escalable y de bajo costo
-
----
-
-## ⭐ Características Principales
-
-### 🎨 Frontend
-- ✅ **Diseño Dark Mode Premium** con fondo azul medianoche (#020617)
-- ✅ **Glassmorphism extremo** en todos los componentes
-- ✅ **Animaciones fluidas** y transiciones suaves
-- ✅ **Diseño responsivo** adaptado a todos los dispositivos
-- ✅ **Tema consistente** con acentos en azul cobalto y plata
-
-### 📱 Módulos Completos
-
-| Módulo | Descripción | Estado |
-|--------|-------------|--------|
-| **Landing Page** | Página principal con hero section y métricas | ✅ Completo |
-| **Servicios** | Bento grid con tarjetas de servicios | ✅ Completo |
-| **Tienda Hardware** | E-commerce de productos especializados | ✅ Completo |
-| **Panel Admin** | Dashboard de gestión de productos | ✅ Completo |
-| **Sobre Nosotros** | Línea de tiempo y filosofía empresarial | ✅ Completo |
-| **Alianzas** | Ecosistema de partners tecnológicos | ✅ Completo |
-| **Contacto** | Formulario con validación en tiempo real | ✅ Completo |
-| **Login/Registro** | Autenticación con 2FA y recuperación | ✅ Completo |
-| **Términos Legales** | Documentación interactiva | ✅ Completo |
-| **Soporte Técnico** | Centro de ayuda 24/7 | ✅ Completo |
-| **Feed Publicitario** | Grid estilo Instagram para contenido | ✅ Completo |
-
-### 🔧 Backend (Simulado)
-- ✅ Validación en tiempo real de formularios
-- ✅ Sistema de tickets de soporte
-- ✅ Gestión de productos CRUD
-- ✅ Autenticación de usuarios
-- ✅ Base de conocimiento
-
----
-
-## 💻 Tecnologías Utilizadas
-
-### Frontend
-```javascript
-{
-  "core": {
-    "html5": "Estructura semántica",
-    "css3": "Estilos modernos con Tailwind",
-    "javascript": "Interactividad y validaciones"
-  },
-  "frameworks": {
-    "tailwindcss": "^3.4.1",
-    "chart.js": "^4.4.0"
-  },
-  "fonts": {
-    "inter": "Tipografía principal",
-    "jetbrains-mono": "Texto técnico y código"
-  },
-  "icons": {
-    "lucide": "Iconos vectoriales"
-  },
-  "tools": {
-    "google-fonts": "Fuentes optimizadas",
-    "cdn": "Distribución de recursos"
-  }
-}
+## 📞 Contacto
+- 📧 elsanchezok@yahoo.com
+- 📱 +(504) 3315-4594
+- 🌐 https://infinihon.vercel.app
+- 📍 Cortés, La Ceiba, Honduras
